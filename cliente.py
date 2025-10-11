@@ -1,10 +1,10 @@
 # cliente.py
 import socket
 import threading
-import pickle
 import sys
 
 from logger_config import setup_logger
+from utils import send_message, receive_message
 from cripto import CriptoRSA, CriptoSerpent
 
 log = setup_logger(__name__)
@@ -25,12 +25,11 @@ def receive_handler(client_socket):
     
     while True:
         try:
-            data = client_socket.recv(4096)
-            if not data:
+            package = receive_message(client_socket)
+            if not package:
                 log.warning("Conexão com o servidor foi fechada.")
                 break
 
-            package = pickle.loads(data)
             log.debug(f"Pacote recebido do servidor. Tipo: {package.get('type')}")
 
             # Lógica para tratar diferentes tipos de pacotes
@@ -77,7 +76,11 @@ def start_client():
 
         # Envia a chave pública RSA para o servidor imediatamente após a conexão
         log.debug("Enviando chave pública RSA para o servidor...")
-        client_socket.send(crypto_rsa.get_public_key_pem())
+        pubkey_package = {
+            "type": "pubkey",
+            "key": crypto_rsa.get_public_key_pem()
+        }
+        send_message(client_socket, pubkey_package)
         log.info("Chave pública enviada.")
 
         # Inicia a thread para receber mensagens
@@ -109,7 +112,7 @@ def start_client():
                 "type": "chat_message",
                 "content": encrypted_content
             }
-            client_socket.send(pickle.dumps(message_package))
+            send_message(client_socket, message_package)
 
     except ConnectionRefusedError:
         log.critical("Não foi possível conectar ao servidor. Verifique se ele está em execução.")

@@ -1,11 +1,11 @@
 # servidor.py
 import socket
 import threading
-import pickle
 from Crypto.Random import get_random_bytes
 from Crypto.PublicKey import RSA
 
 from logger_config import setup_logger
+from utils import send_message, receive_message
 from cripto import encrypt_with_public_key
 
 log = setup_logger(__name__)
@@ -25,8 +25,8 @@ def broadcast_new_group_key():
             log.warning("Nenhum cliente conectado. Abortando rekeying.")
             return
             
-        # 1. Gerar uma nova chave de sessão combinada (Serpent + HMAC)
-        new_serpent_key = get_random_bytes(64) # 32 bytes para Serpent (256 bits) + 32 bytes para HMAC (256 bits)
+        # 1. Gerar uma nova chave de sessão Serpent
+        new_serpent_key = get_random_bytes(32) # 32 bytes para Serpent (256 bits)
         log.debug(f"Nova chave de sessão Serpent gerada: {new_serpent_key.hex()}")
 
         # 2. Distribuir para cada cliente, criptografada com sua chave pública RSA
@@ -44,7 +44,7 @@ def broadcast_new_group_key():
                 }
                 
                 # Serializa e envia
-                client_socket.send(pickle.dumps(rekey_package))
+                send_message(client_socket, rekey_package)
                 log.info(f"Nova chave de sessão enviada com sucesso para {client_data['addr']}")
 
             except Exception as e:
@@ -59,7 +59,7 @@ def broadcast_message(message_package, origin_socket):
         for client_socket in clients:
             if client_socket != origin_socket:
                 try:
-                    client_socket.send(pickle.dumps(message_package))
+                    send_message(client_socket, message_package)
                 except Exception as e:
                     log.error(f"Erro ao retransmitir para {clients[client_socket]['addr']}: {e}")
 
@@ -68,35 +68,36 @@ def handle_client(client_socket, addr):
     log.info(f"Nova conexão de {addr}. Aguardando chave pública RSA.")
     
     try:
-        # 1. Receber chave pública do cliente
-        public_key_pem = client_socket.recv(4096)
-        if not public_key_pem:
+        # 1. Receber pacote inicial com a chave pública do cliente
+        initial_package = receive_message(client_socket)
+        if not initial_package or initial_package.get('type') != 'pubkey':
             log.warning(f"Cliente {addr} desconectou antes de enviar a chave pública.")
             return
 
+        public_key_pem = initial_package['key']
         public_key = RSA.import_key(public_key_pem)
         log.debug(f"Chave pública RSA recebida e importada de {addr}.")
 
         # 2. Adicionar cliente ao grupo e iniciar rekeying
         with clients_lock:
             clients[client_socket] = {"addr": addr, "public_key": public_key}
-        
+
         # Informa o novo cliente sobre sua conexão
         info_package = {"type": "server_info", "message": "Conectado com sucesso! Aguardando outros membros para iniciar o chat."}
-        client_socket.send(pickle.dumps(info_package))
+        send_message(client_socket, info_package)
 
         broadcast_new_group_key()
 
         # 3. Loop para receber e retransmitir mensagens
         while True:
-            data = client_socket.recv(4096)
-            if not data:
+            package = receive_message(client_socket)
+            if not package:
                 log.warning(f"Conexão com {addr} foi fechada pelo cliente.")
                 break
             
             # Apenas retransmite, não precisa entender o conteúdo
-            log.debug(f"Recebido pacote de {len(data)} bytes de {addr}. Retransmitindo.")
-            broadcast_message(pickle.loads(data), client_socket)
+            log.debug(f"Recebido pacote do tipo '{package.get('type')}' de {addr}. Retransmitindo.")
+            broadcast_message(package, client_socket)
 
     except (ConnectionResetError, EOFError):
         log.warning(f"Conexão com {addr} perdida inesperadamente.")
@@ -116,6 +117,8 @@ def handle_client(client_socket, addr):
 
 def start_server():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # Permite a reutilização do endereço para evitar o erro "Address already in use" em reinicializações rápidas
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind((HOST, PORT))
     server_socket.listen()
     log.info(f"Servidor iniciado e ouvindo em {HOST}:{PORT}")

@@ -44,48 +44,33 @@ def encrypt_with_public_key(public_key, data):
 class CriptoSerpent:
     """Gerencia a criptografia simétrica com Serpent."""
     # pyserpent usa chaves de 128, 192 ou 256 bits. Vamos usar 256 bits (32 bytes).
-    # O HMAC também usará uma chave de 256 bits (32 bytes).
-    # Portanto, a chave de sessão total terá 64 bytes.
     def __init__(self, key):
-        if len(key) != 64:
-            raise ValueError("A chave de sessão combinada (Serpent + HMAC) deve ter 64 bytes.")
-        self.serpent_key = key[:32] # Primeiros 32 bytes para Serpent
-        self.hmac_key = key[32:]   # Últimos 32 bytes para HMAC
-        log.info(f"Instância de CriptoSerpent inicializada com chave Serpent de 256 bits e chave HMAC de 256 bits.")
+        if len(key) != 32:
+            raise ValueError("A chave de sessão Serpent deve ter 32 bytes.")
+        self.serpent_key = key
+        log.info("Instância de CriptoSerpent inicializada com chave Serpent de 256 bits.")
 
     def encrypt(self, plaintext_bytes):
-        """Criptografa e autentica dados usando Serpent-CBC e HMAC-SHA256 (Encrypt-then-MAC)."""
-        log.debug(f"Criptografando {len(plaintext_bytes)} bytes com Serpent-CBC + HMAC.")
+        """Criptografa dados usando Serpent-CBC."""
+        log.debug(f"Criptografando {len(plaintext_bytes)} bytes com Serpent-CBC.")
         
         # 1. Gerar um IV (Vetor de Inicialização) aleatório para CBC
         iv = Serpent.generateIV()
 
         # 2. Criptografar os dados com Serpent-CBC
         ciphertext = serpent_cbc_encrypt(self.serpent_key, plaintext_bytes, iv)
-
-        # 3. Gerar um MAC (código de autenticação) do IV + ciphertext
-        mac = hmac.new(self.hmac_key, iv + ciphertext, hashlib.sha256).digest()
         
-        log.debug("Criptografia e autenticação concluídas.")
-        return {'iv': iv, 'ciphertext': ciphertext, 'mac': mac}
+        log.debug("Criptografia concluída.")
+        return {'iv': iv, 'ciphertext': ciphertext}
 
     def decrypt(self, encrypted_package):
-        """Verifica a autenticidade e descriptografa dados."""
+        """Descriptografa dados."""
         iv = encrypted_package['iv']
         ciphertext = encrypted_package['ciphertext']
-        received_mac = encrypted_package['mac']
         log.debug(f"Tentando descriptografar {len(ciphertext)} bytes.")
 
-        # 1. Recalcular o MAC com os dados recebidos
-        expected_mac = hmac.new(self.hmac_key, iv + ciphertext, hashlib.sha256).digest()
-
-        # 2. Comparar os MACs de forma segura
-        if not hmac.compare_digest(received_mac, expected_mac):
-            log.error("FALHA NA VERIFICAÇÃO DE AUTENTICIDADE (MAC)! A mensagem pode ter sido adulterada.")
-            return None
-
-        # 3. Se o MAC for válido, descriptografar
+        # Descriptografa os dados
         decrypted_bytes = serpent_cbc_decrypt(self.serpent_key, ciphertext, iv)
-        log.debug("Descriptografia e verificação bem-sucedidas.")
+        log.debug("Descriptografia bem-sucedida.")
         # O pyserpent pode adicionar padding que precisa ser removido.
         return decrypted_bytes.rstrip(b'\0')
