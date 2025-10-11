@@ -61,6 +61,7 @@ class CriptoSerpent:
         ciphertext = serpent_cbc_encrypt(self.serpent_key, plaintext_bytes, iv)
         
         log.debug("Criptografia concluída.")
+        print()
         return {'iv': iv, 'ciphertext': ciphertext}
 
     def decrypt(self, encrypted_package):

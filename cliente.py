@@ -7,7 +7,7 @@ from logger_config import setup_logger
 from utils import send_message, receive_message
 from cripto import CriptoRSA, CriptoSerpent
 
-log = setup_logger(__name__)
+log = setup_logger('cliente')
 
 HOST = '127.0.0.1'
 PORT = 65432
@@ -30,6 +30,7 @@ def receive_handler(client_socket):
                 log.warning("Conexão com o servidor foi fechada.")
                 break
 
+            print("\n")
             log.debug(f"Pacote recebido do servidor. Tipo: {package.get('type')}")
 
             # Lógica para tratar diferentes tipos de pacotes
@@ -44,22 +45,23 @@ def receive_handler(client_socket):
                     # Atualiza a instância de criptografia simétrica com a nova chave
                     crypto_serpent = CriptoSerpent(new_session_key)
                     log.info("CHAVE DE SESSÃO DO GRUPO ATUALIZADA COM SUCESSO.")
-                    print("\n[SISTEMA] A chave de segurança do grupo foi atualizada.\n> ", end="")
+                    # \r para voltar ao início da linha, \033[K para limpar a linha
+                    print(f"\r\033[K[SISTEMA] A chave de segurança do grupo foi atualizada.\n> ", end="", flush=True)
                 else:
                     log.error("Falha ao descriptografar a nova chave de sessão. A comunicação pode estar comprometida.")
 
             elif package['type'] == 'chat_message':
                 if crypto_serpent:
                     encrypted_content = package['content']
-                    # Descriptografa a mensagem do chat com a chave de sessão atual
                     decrypted_message = crypto_serpent.decrypt(encrypted_content)
                     if decrypted_message:
-                        print(f"\n[Mensagem recebida]: {decrypted_message.decode('utf-8')}\n> ", end="")
+                        print()
+                        print(f"\r\033[K[Mensagem recebida] - {decrypted_message.decode('utf-8')}\n\n> ", end="", flush=True)
                 else:
                     log.warning("Mensagem de chat recebida, mas ainda não temos uma chave de sessão.")
             
             elif package['type'] == 'server_info':
-                print(f"\n[INFO DO SERVIDOR]: {package['message']}\n> ", end="")
+                print(f"\r\033[K[INFO DO SERVIDOR]: {package['message']}\n> ", end="", flush=True)
 
         except (EOFError, ConnectionResetError):
             log.warning("Conexão com o servidor perdida.")
@@ -83,15 +85,41 @@ def start_client():
         send_message(client_socket, pubkey_package)
         log.info("Chave pública enviada.")
 
+        # --- Configuração Inicial Síncrona ---
+        # Aguarda o servidor enviar a confirmação e a primeira chave de sessão ANTES de pedir o input do usuário.
+        log.info("Aguardando configuração inicial do servidor...\n")
+        initial_key_received = False
+        while not initial_key_received:
+            package = receive_message(client_socket)
+            if not package:
+                raise ConnectionError("Servidor fechou a conexão durante a configuração.")
+            
+            if package.get('type') == 'server_info':
+                print(f"[INFO DO SERVIDOR]: {package.get('message')}\n")
+            
+            elif package.get('type') == 'control_rekey':
+                log.info("Recebida chave de sessão inicial.")
+                encrypted_key = package['key']
+                new_session_key = crypto_rsa.decrypt(encrypted_key)
+                if new_session_key:
+                    global crypto_serpent
+                    crypto_serpent = CriptoSerpent(new_session_key)
+                    log.info("CHAVE DE SESSÃO INICIAL ATUALIZADA COM SUCESSO.")
+                    print("[SISTEMA] A chave de segurança do grupo foi estabelecida.")
+                    initial_key_received = True # Encerra o loop de configuração
+                else:
+                    raise ValueError("Falha ao descriptografar a chave de sessão inicial.")
+        # --- Fim da Configuração Inicial ---
+
         # Inicia a thread para receber mensagens
         receive_thread = threading.Thread(target=receive_handler, args=(client_socket,))
         receive_thread.daemon = True
         receive_thread.start()
         
-        # Loop principal para enviar mensagens
-        print("Digite seu nome de usuário para o chat:")
+        # Agora que a configuração terminou, pede o nome de usuário
+        print("\nDigite seu nome de usuário para o chat:")
         username = input("> ")
-        print(f"Olá, {username}! Você pode começar a enviar mensagens. Digite 'sair' para fechar.")
+        print(f"\nOlá, {username}! Você pode começar a enviar mensagens. Digite 'sair' para fechar.")
 
         while True:
             message_text = input("> ")
@@ -104,6 +132,9 @@ def start_client():
             
             full_message = f"{username}: {message_text}"
             
+            # Adiciona uma linha em branco para separar o input dos logs de debug
+            print()
+
             # Criptografa a mensagem com a chave de sessão Serpent atual
             encrypted_content = crypto_serpent.encrypt(full_message.encode('utf-8'))
             
