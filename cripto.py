@@ -1,6 +1,4 @@
 # cripto.py
-import hmac
-import hashlib
 from pyserpent import Serpent, serpent_cbc_encrypt, serpent_cbc_decrypt
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
@@ -23,6 +21,9 @@ class CriptoRSA:
 
     def get_public_key_pem(self):
         return self._public_key.export_key()
+
+    def get_private_key_pem(self):
+        return self._private_key.export_key()
 
     def decrypt(self, encrypted_data):
         log.debug(f"Tentando descriptografar {len(encrypted_data)} bytes com a chave privada RSA.")
@@ -61,7 +62,6 @@ class CriptoSerpent:
         ciphertext = serpent_cbc_encrypt(self.serpent_key, plaintext_bytes, iv)
         
         log.debug("Criptografia concluída.")
-        print()
         return {'iv': iv, 'ciphertext': ciphertext}
 
     def decrypt(self, encrypted_package):
@@ -71,7 +71,20 @@ class CriptoSerpent:
         log.debug(f"Tentando descriptografar {len(ciphertext)} bytes.")
 
         # Descriptografa os dados
-        decrypted_bytes = serpent_cbc_decrypt(self.serpent_key, ciphertext, iv)
+        decrypted_bytes_with_padding = serpent_cbc_decrypt(self.serpent_key, ciphertext, iv)
         log.debug("Descriptografia bem-sucedida.")
+        
         # O pyserpent pode adicionar padding que precisa ser removido.
-        return decrypted_bytes.rstrip(b'\0')
+        # Vamos calcular a quantidade de padding.
+        unpadded_message = decrypted_bytes_with_padding.rstrip(b'\0')
+        padded_size = len(ciphertext) # O tamanho do bloco é o tamanho do ciphertext recebido.
+        unpadded_size = len(unpadded_message)
+        padding_bytes_count = padded_size - unpadded_size
+        
+        log.debug(f"Removidos {padding_bytes_count} bytes de padding.")
+        
+        return {
+            'plaintext': unpadded_message,
+            'padded_size': padded_size,
+            'unpadded_size': unpadded_size
+        }
