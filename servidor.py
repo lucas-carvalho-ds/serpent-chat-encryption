@@ -63,7 +63,9 @@ def notify_members_of_departure(departed_user, groups):
                 notification = {
                     "type": "group_invite", # Reutiliza o fluxo de convite para forçar o re-keying
                     "group_id": new_group_id,
-                    "members": group_sockets_and_keys
+                    "members": group_sockets_and_keys,
+                    "reason": "member_left",
+                    "departed_user": departed_user
                 }
                 for member_user in remaining_members:
                     member_sock = get_client_by_username(member_user)

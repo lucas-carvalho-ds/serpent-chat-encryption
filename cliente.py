@@ -55,7 +55,7 @@ def generate_and_distribute_group_key(client_socket, group_id, members):
             "target_username": username # Servidor usará isso para rotear
         }
         send_message(client_socket, rekey_package)
-        log.info(f"Pacote de chave para o grupo {group_id} enviado para '{username}'.")
+        log.info(f"Pacote de chave para o grupo {group_id} enviado para '{username}'\n")
 
 def receive_handler(client_socket, initial_setup_complete, my_username):
     """Lida com o recebimento de mensagens do servidor."""
@@ -91,7 +91,7 @@ def receive_handler(client_socket, initial_setup_complete, my_username):
                     group_numeric_id = active_conversations.index(group_id)
 
                     log.info(f"Chave de sessão para o grupo {group_id} estabelecida.")
-                    print(f"\r\033[K[SISTEMA] Conversa segura com '{' & '.join(group_id)}' estabelecida. ID do Grupo: {group_numeric_id}\n> ", end="", flush=True)
+                    print(f"\r\033[K[SISTEMA] Conversa segura com '{' & '.join(group_id)}' estabelecida. ID do Grupo: {group_numeric_id}\n\n> ", end="", flush=True)
                 else:
                     log.error("Falha ao descriptografar a nova chave de sessão. A comunicação pode estar comprometida.")
 
@@ -119,7 +119,7 @@ def receive_handler(client_socket, initial_setup_complete, my_username):
                     decrypted_block_size = decryption_result['padded_size'] # Tamanho do bloco descriptografado (e.g., 16)
                     original_message_size = decryption_result['unpadded_size'] # Tamanho da mensagem original (e.g., 9)
                     print(f"[AÇÃO] Mensagem descriptografada. O bloco de {decrypted_block_size} bytes continha {original_message_size} bytes de dados e {decrypted_block_size - original_message_size} bytes de preenchimento.")
-                    print(f"\r\033[K[Mensagem de {' & '.join(group_id)}] - {decrypted_message.decode('utf-8')}\n\n> ", end="", flush=True)
+                    print(f"\n\r\033[K[Mensagem do chat {' & '.join(group_id)}] - {decrypted_message.decode('utf-8')}\n\n> ", end="", flush=True)
                 else:
                     log.warning(f"Mensagem de chat recebida para o grupo {group_id}, mas não temos a chave de sessão.")
             
@@ -201,7 +201,7 @@ def start_client():
         print("  /private <username> - Inicia chat entre duas pessoas")
         print("  /group <user1> <user2> <user3>... - Inicia chat em um grupo")
         print("  /msg <group_id> <message> - Envia mensagem para um grupo")
-        print("  /sair - Fecha o cliente")
+        print("  /sair - Fecha o cliente\n")
 
         while True:
             full_command = input("> ")
@@ -218,7 +218,7 @@ def start_client():
                 if group_id in session_keys:
                     print(f"[SISTEMA] Você já tem uma conversa com {target_user}.")
                 else:
-                    print(f"[SISTEMA] Solicitando início de conversa com {target_user}...")
+                    print(f"\n[SISTEMA] Solicitando início de conversa com {target_user}...")
                     init_package = {"type": "group_init", "members": [username, target_user]}
                     send_message(client_socket, init_package)
 
@@ -246,10 +246,12 @@ def start_client():
                             continue
 
                         full_message = f"{username}: {message_text}"
+                        print(f"\n[AÇÃO] Criptografando a mensagem '{full_message}' com a chave de sessão atual.")
                         encrypted_content = crypto_instance.encrypt(full_message.encode('utf-8'))
                         message_package = {"type": "chat_message", "group_id": group_id, "content": encrypted_content}
                         send_message(client_socket, message_package)
-                        print(f"[AÇÃO] Mensagem enviada para o grupo {group_numeric_id}.")
+                        print(f"[AÇÃO] Mensagem criptografada (IV: {encrypted_content['iv'].hex()}, Ciphertext: {encrypted_content['ciphertext'].hex()}).")
+                        print(f"[AÇÃO] Mensagem enviada para o grupo {group_numeric_id}.\n")
                     else:
                         print("[ERRO] ID de grupo inválido.")
                 except (ValueError, IndexError):

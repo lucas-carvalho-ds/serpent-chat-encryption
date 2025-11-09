@@ -68,7 +68,7 @@ class CriptoSerpent:
         """Descriptografa dados."""
         iv = encrypted_package['iv']
         ciphertext = encrypted_package['ciphertext']
-        log.debug(f"Tentando descriptografar {len(ciphertext)} bytes.")
+        log.debug(f"Tentando descriptografar {len(ciphertext)} bytes...")
 
         # Descriptografa os dados
         decrypted_bytes_with_padding = serpent_cbc_decrypt(self.serpent_key, ciphertext, iv)
@@ -81,7 +81,7 @@ class CriptoSerpent:
         unpadded_size = len(unpadded_message)
         padding_bytes_count = padded_size - unpadded_size
         
-        log.debug(f"Removidos {padding_bytes_count} bytes de padding.")
+        #log.debug(f"Removidos {padding_bytes_count} bytes de padding.")
         
         return {
             'plaintext': unpadded_message,
