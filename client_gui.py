@@ -186,6 +186,9 @@ class ChatGUI:
     def build_main_ui(self):
         self.clear_window()
         
+        # Update window title with username
+        self.root.title(f"Serpent Chat - {self.username}")
+        
         # Main Layout: Sidebar (Rooms/Users) | Chat Area
         paned = ttk.PanedWindow(self.root, orient="horizontal")
         paned.pack(fill="both", expand=True)
@@ -194,11 +197,25 @@ class ChatGUI:
         sidebar = ttk.Frame(paned, padding="5", width=250)
         paned.add(sidebar, weight=1)
         
+        # User info header
+        user_header = ttk.Frame(sidebar)
+        user_header.pack(fill="x", pady=(0, 10))
+        ttk.Label(user_header, text="Logado como:", font=('Helvetica', 9)).pack(anchor="w")
+        ttk.Label(user_header, text=f"👤 {self.username}", font=('Helvetica', 11, 'bold'), foreground='#2e7d32').pack(anchor="w")
+        ttk.Separator(user_header, orient='horizontal').pack(fill='x', pady=5)
+        
         # Rooms List
         ttk.Label(sidebar, text="Suas Salas", style="Bold.TLabel").pack(anchor="w")
         self.rooms_listbox = tk.Listbox(sidebar, height=15)
         self.rooms_listbox.pack(fill="x", pady=5)
         self.rooms_listbox.bind('<<ListboxSelect>>', self.on_room_select)
+        
+        # Empty state label for when no rooms exist
+        self.empty_rooms_label = ttk.Label(sidebar,
+                                           text="Você ainda não entrou\nem nenhuma sala.\n\nCrie uma conversa usando\nos botões abaixo! 👇",
+                                           font=('Helvetica', 9, 'italic'),
+                                           foreground='gray',
+                                           justify='center')
         
         # Buttons
         btn_frame = ttk.Frame(sidebar)
@@ -432,8 +449,19 @@ class ChatGUI:
 
     def update_rooms_list(self):
         self.rooms_listbox.delete(0, tk.END)
-        for r_id, r_data in self.rooms.items():
-            self.rooms_listbox.insert(tk.END, f"{r_id}: {r_data['name']} ({r_data['type']})")
+        
+        # Show/hide empty state based on rooms count
+        if len(self.rooms) == 0 and hasattr(self, 'empty_rooms_label'):
+            self.rooms_listbox.pack_forget()
+            self.empty_rooms_label.pack(fill="x", pady=20)
+        else:
+            if hasattr(self, 'empty_rooms_label'):
+                self.empty_rooms_label.pack_forget()
+            if not self.rooms_listbox.winfo_ismapped():
+                self.rooms_listbox.pack(fill="x", pady=5)
+            
+            for r_id, r_data in self.rooms.items():
+                self.rooms_listbox.insert(tk.END, f"{r_id}: {r_data['name']} ({r_data['type']})")
 
     def append_chat(self, text):
         self.chat_history.config(state='normal')
