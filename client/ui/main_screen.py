@@ -1,0 +1,100 @@
+"""
+Main Screen Module
+Contains the main chat UI with rooms list, users list, and chat area.
+"""
+
+import tkinter as tk
+from tkinter import ttk, scrolledtext
+
+
+class MainScreen:
+    """Manages the main chat interface"""
+    
+    def __init__(self, root, username):
+        self.root = root
+        self.username = username
+        self.rooms_listbox = None
+        self.users_listbox = None
+        self.chat_header = None
+        self.chat_history = None
+        self.msg_entry = None
+        self.empty_rooms_label = None
+        
+    def build_ui(self, on_room_select_callback, on_send_callback, 
+                 on_create_private_callback, on_create_group_callback, on_join_group_callback):
+        """Builds the main chat UI"""
+        # Clear window
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        
+        # Update window title with username
+        self.root.title(f"Serpent Chat - {self.username}")
+        
+        # Main Layout: Sidebar (Rooms/Users) | Chat Area
+        paned = ttk.PanedWindow(self.root, orient="horizontal")
+        paned.pack(fill="both", expand=True)
+        
+        # Sidebar
+        sidebar = ttk.Frame(paned, padding="5", width=250)
+        paned.add(sidebar, weight=1)
+        
+        # User info header
+        user_header = ttk.Frame(sidebar)
+        user_header.pack(fill="x", pady=(0, 10))
+        ttk.Label(user_header, text="Logado como:", font=('Helvetica', 9)).pack(anchor="w")
+        ttk.Label(user_header, text=f"👤 {self.username}", font=('Helvetica', 11, 'bold'), foreground='#2e7d32').pack(anchor="w")
+        ttk.Separator(user_header, orient='horizontal').pack(fill='x', pady=5)
+        
+        # Rooms List
+        ttk.Label(sidebar, text="Suas Salas", style="Bold.TLabel").pack(anchor="w")
+        
+        # Container for rooms list and empty state
+        rooms_container = ttk.Frame(sidebar, height=200)
+        rooms_container.pack(fill="x", pady=5)
+        rooms_container.pack_propagate(False)  # Maintain fixed height
+        
+        self.rooms_listbox = tk.Listbox(rooms_container, height=15)
+        self.rooms_listbox.pack(fill="both", expand=True)
+        self.rooms_listbox.bind('<<ListboxSelect>>', on_room_select_callback)
+        
+        # Empty state label for when no rooms exist
+        self.empty_rooms_label = ttk.Label(rooms_container,
+                                           text="Você ainda não entrou\nem nenhuma sala.\n\nCrie ou entre em uma conversa\nusando os botões abaixo! 👇",
+                                           font=('Helvetica', 9, 'italic'),
+                                           foreground='gray',
+                                           justify='center',
+                                           anchor='center',
+                                           background='white',
+                                           relief='sunken',
+                                           padding=20)
+        
+        # Buttons
+        btn_frame = ttk.Frame(sidebar)
+        btn_frame.pack(fill="x", pady=5)
+        ttk.Button(btn_frame, text="Nova Sala Individual", command=on_create_private_callback).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Nova Sala em Grupo", command=on_create_group_callback).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Entrar em Sala em Grupo", command=on_join_group_callback).pack(fill="x", pady=2)
+        
+        # Users List
+        ttk.Label(sidebar, text="Usuários Online", style="Bold.TLabel").pack(anchor="w", pady=(10,0))
+        self.users_listbox = tk.Listbox(sidebar, height=10)
+        self.users_listbox.pack(fill="both", expand=True, pady=5)
+        
+        # Chat Area
+        chat_frame = ttk.Frame(paned, padding="5")
+        paned.add(chat_frame, weight=4)
+        
+        self.chat_header = ttk.Label(chat_frame, text="Selecione uma sala", font=('Helvetica', 12, 'bold'))
+        self.chat_header.pack(anchor="w", pady=5)
+        
+        self.chat_history = scrolledtext.ScrolledText(chat_frame, state='disabled', wrap='word')
+        self.chat_history.pack(fill="both", expand=True, pady=5)
+        
+        input_frame = ttk.Frame(chat_frame)
+        input_frame.pack(fill="x", pady=5)
+        
+        self.msg_entry = ttk.Entry(input_frame)
+        self.msg_entry.pack(side="left", fill="x", expand=True, padx=(0,5))
+        self.msg_entry.bind("<Return>", lambda e: on_send_callback())
+        
+        ttk.Button(input_frame, text="Enviar", command=on_send_callback).pack(side="right")
