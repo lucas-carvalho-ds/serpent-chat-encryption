@@ -158,7 +158,7 @@ class ChatServer:
         # Verificar se já existe
         existing_room_id = self.db.get_private_chat_id(creator_id, target_id)
         if existing_room_id:
-            return {'status': 'success', 'message': 'Chat privado já existe.', 'room_id': existing_room_id}
+            return {'status': 'success', 'message': 'Chat individual já existe.', 'room_id': existing_room_id}
             
         # Criar nova sala
         room_key = Serpent.generateIV() + Serpent.generateIV()
@@ -171,7 +171,7 @@ class ChatServer:
         # Notificar ambos e enviar chaves
         await self.notify_new_room(room_id, room_name, 'private', [creator, target_user], room_key)
         
-        return {'status': 'success', 'message': 'Chat privado criado.', 'room_id': room_id}
+        return {'status': 'success', 'message': 'Chat individual criado.', 'room_id': room_id}
 
     async def create_group_chat(self, creator, group_name, members):
         creator_data = self.db.get_user_by_username(creator)

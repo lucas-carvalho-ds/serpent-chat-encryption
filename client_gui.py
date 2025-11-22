@@ -162,9 +162,9 @@ class ChatGUI:
         # Buttons
         btn_frame = ttk.Frame(sidebar)
         btn_frame.pack(fill="x", pady=5)
-        ttk.Button(btn_frame, text="Novo Privado", command=self.create_private_chat).pack(fill="x", pady=2)
-        ttk.Button(btn_frame, text="Novo Grupo", command=self.create_group_chat).pack(fill="x", pady=2)
-        ttk.Button(btn_frame, text="Entrar (ID)", command=self.join_room_dialog).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Nova Sala Individual", command=self.create_private_chat).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Nova Sala em Grupo", command=self.create_group_chat).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Entrar em Sala em Grupo", command=self.join_room_dialog).pack(fill="x", pady=2)
         
         # Users List
         ttk.Label(sidebar, text="Usuários Online", style="Bold.TLabel").pack(anchor="w", pady=(10,0))
@@ -329,12 +329,12 @@ class ChatGUI:
         })
 
     def create_private_chat(self):
-        target = simpledialog.askstring("Novo Chat Privado", "Nome do usuário:")
+        target = simpledialog.askstring("Nova Sala Individual", "Nome do usuário:")
         if target:
             self.outgoing_queue.put({'action': 'create_private_chat', 'target_username': target})
 
     def create_group_chat(self):
-        name = simpledialog.askstring("Novo Grupo", "Nome do Grupo:")
+        name = simpledialog.askstring("Nova Sala em Grupo", "Nome do Grupo:")
         members = simpledialog.askstring("Membros", "Usuários (separados por vírgula):")
         if name and members:
             member_list = [m.strip() for m in members.split(',')]
@@ -345,7 +345,7 @@ class ChatGUI:
             })
 
     def join_room_dialog(self):
-        r_id = simpledialog.askinteger("Entrar na Sala", "ID da Sala:")
+        r_id = simpledialog.askinteger("Entrar em Sala em Grupo", "ID da Sala:")
         if r_id:
             # Logic to join? Currently server auto-joins if invited.
             # This might be for public rooms in future.

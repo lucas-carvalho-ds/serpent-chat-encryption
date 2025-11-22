@@ -162,12 +162,12 @@ class Database:
         return members
 
     def get_private_chat_id(self, user1_id, user2_id):
-        """Verifica se já existe um chat privado entre dois usuários."""
+        """Verifica se já existe um chat individual entre dois usuários."""
         conn = self.get_connection()
         cursor = conn.cursor()
         # Busca salas do tipo 'private' que tenham ambos os usuários
         # Esta query é um pouco complexa para SQLite simples, vamos fazer em python
-        # Pegar salas privadas do user1
+        # Pegar salas individuais do user1
         cursor.execute('''
             SELECT r.id
             FROM rooms r
@@ -176,7 +176,7 @@ class Database:
         ''', (user1_id,))
         user1_rooms = set(row[0] for row in cursor.fetchall())
         
-        # Pegar salas privadas do user2
+        # Pegar salas individuais do user2
         cursor.execute('''
             SELECT r.id
             FROM rooms r
