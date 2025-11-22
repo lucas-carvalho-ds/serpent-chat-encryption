@@ -13,6 +13,7 @@ from client.validation import validate_login, validate_registration, validate_us
 from client.message_handler import MessageHandler
 from client.ui.auth_screens import AuthScreens
 from client.ui.main_screen import MainScreen
+from client.ui.dialogs import MemberSelectionDialog, RoomMembersDialog
 from client.ui.qr_dialog import show_qr_code
 from crypto_utils import CryptoUtils, SerpentCipher
 from logger_config import setup_logger
@@ -38,6 +39,9 @@ class ChatGUI:
         self.rooms = {}
         self.room_keys = {}
         self.room_ciphers = {}
+        self.online_users = set()  # All users currently online
+        self.room_members = {}  # {room_id: [usernames]}
+        self.room_online_members = {}  # {room_id: set(online_usernames)}
         self.active_room_id = None
         
         # UI references
@@ -153,49 +157,25 @@ class ChatGUI:
         self.outgoing_queue.put({'action': 'create_private_chat', 'target_username': target})
     
     def create_group_chat(self):
-        """Create group chat dialog"""
-        name = simpledialog.askstring("Nova Sala em Grupo", "Nome do Grupo:")
-        if not name:
+        """Create group chat with checkbox-based member selection"""
+        # Get all users from the online users set
+        all_users = list(self.online_users)
+        
+        if not all_users or (len(all_users) == 1 and self.username in all_users):
+            messagebox.showinfo("Info", "Não há outros usuários disponíveis para criar um grupo.")
             return
         
-        name = name.strip()
-        if not name:
-            messagebox.showerror("Erro", "O nome do grupo não pode estar vazio.")
-            return
+        # Show member selection dialog
+        dialog = MemberSelectionDialog(self.root, all_users, self.username, self.online_users)
+        result = dialog.show()
         
-        if len(name) < 3:
-            messagebox.showerror("Erro", "O nome do grupo deve ter pelo menos 3 caracteres.")
-            return
-        
-        if len(name) > 50:
-            messagebox.showerror("Erro", "O nome do grupo não pode ter mais de 50 caracteres.")
-            return
-        
-        members = simpledialog.askstring("Membros", "Usuários (separados por vírgula):")
-        if not members:
-            return
-        
-        members = members.strip()
-        if not members:
-            messagebox.showerror("Erro", "Você deve adicionar pelo menos um membro.")
-            return
-        
-        member_list = [m.strip() for m in members.split(',') if m.strip()]
-        if not member_list:
-            messagebox.showerror("Erro", "Você deve adicionar pelo menos um membro válido.")
-            return
-        
-        for member in member_list:
-            valid, msg = validate_username(member)
-            if not valid:
-                messagebox.showerror("Erro de Validação", f"Membro '{member}': {msg}")
-                return
-        
-        self.outgoing_queue.put({
-            'action': 'create_group_chat',
-            'group_name': name,
-            'members': member_list
-        })
+        if result:
+            group_name, selected_members = result
+            self.outgoing_queue.put({
+                'action': 'create_group_chat',
+                'group_name': group_name,
+                'members': selected_members
+            })
     
     def join_room_dialog(self):
         """Join room dialog (placeholder)"""
@@ -235,6 +215,20 @@ class ChatGUI:
         if not text:
             messagebox.showwarning("Aviso", "A mensagem não pode estar vazia.")
             return
+        
+        # Check if there are other online members in the room
+        if self.active_room_id in self.room_online_members:
+            online_in_room = self.room_online_members[self.active_room_id]
+            # Remove self from count
+            other_online = online_in_room - {self.username}
+            
+            if len(other_online) == 0:
+                messagebox.showwarning(
+                    "Sem destinatários online",
+                    "Não há outros usuários online nesta sala no momento.\n\n"
+                    "Sua mensagem não será recebida por ninguém agora."
+                )
+                return
         
         cipher = self.room_ciphers[self.active_room_id]
         key = self.room_keys[self.active_room_id]
@@ -303,11 +297,15 @@ class ChatGUI:
                 self.main_screen.rooms_listbox.insert(tk.END, f"{r_id}: {r_data['name']} ({r_data['type']})")
     
     def update_user_list(self, users):
-        """Update users list in UI"""
+        """Update users list in UI with online status indicators"""
+        # Track online users
+        self.online_users = set(users)
+        
         if self.main_screen and hasattr(self.main_screen, 'users_listbox'):
             self.main_screen.users_listbox.delete(0, tk.END)
-            for u in users:
-                self.main_screen.users_listbox.insert(tk.END, u)
+            for u in sorted(users):
+                # All users in this list are online (server sends only online users)
+                self.main_screen.users_listbox.insert(tk.END, f"🟢 {u}")
     
     def handle_new_message(self, room_id, formatted_msg):
         """Handle new message"""
