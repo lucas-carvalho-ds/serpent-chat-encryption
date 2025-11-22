@@ -111,36 +111,77 @@ class ChatGUI:
         self.style = ttk.Style()
         self.style.configure("Bold.TLabel", font=('Helvetica', 10, 'bold'))
         
-        self.build_login_ui()
+        self.build_welcome_ui()
         
         # Start polling queue
         self.root.after(100, self.check_queue)
 
-    def build_login_ui(self):
+    def build_welcome_ui(self):
+        """Tela inicial com escolha entre Login e Registro"""
         self.clear_window()
         
-        frame = ttk.Frame(self.root, padding="20")
+        frame = ttk.Frame(self.root, padding="40")
         frame.place(relx=0.5, rely=0.5, anchor="center")
         
-        ttk.Label(frame, text="Serpent Chat Login", font=('Helvetica', 16, 'bold')).grid(row=0, column=0, columnspan=2, pady=20)
+        ttk.Label(frame, text="Serpent Chat Seguro", font=('Helvetica', 20, 'bold')).pack(pady=10)
+        ttk.Label(frame, text="Sistema de Chat Criptografado", font=('Helvetica', 12)).pack(pady=5)
         
-        ttk.Label(frame, text="Usuário:").grid(row=1, column=0, sticky="e")
-        self.user_entry = ttk.Entry(frame)
-        self.user_entry.grid(row=1, column=1, pady=5)
+        ttk.Separator(frame, orient='horizontal').pack(fill='x', pady=20)
         
-        ttk.Label(frame, text="Senha:").grid(row=2, column=0, sticky="e")
-        self.pass_entry = ttk.Entry(frame, show="*")
-        self.pass_entry.grid(row=2, column=1, pady=5)
+        ttk.Button(frame, text="Fazer Login", command=self.build_login_ui, width=25).pack(pady=10)
+        ttk.Button(frame, text="Criar Conta", command=self.build_register_ui, width=25).pack(pady=10)
+
+    def build_login_ui(self):
+        """Tela de login com campos de autenticação"""
+        self.clear_window()
         
-        ttk.Label(frame, text="TOTP (Login):").grid(row=3, column=0, sticky="e")
-        self.totp_entry = ttk.Entry(frame)
-        self.totp_entry.grid(row=3, column=1, pady=5)
+        frame = ttk.Frame(self.root, padding="30")
+        frame.place(relx=0.5, rely=0.5, anchor="center")
+        
+        ttk.Label(frame, text="Fazer Login", font=('Helvetica', 16, 'bold')).grid(row=0, column=0, columnspan=2, pady=20)
+        
+        ttk.Label(frame, text="Usuário:").grid(row=1, column=0, sticky="e", padx=5)
+        self.user_entry = ttk.Entry(frame, width=25)
+        self.user_entry.grid(row=1, column=1, pady=8)
+        
+        ttk.Label(frame, text="Senha:").grid(row=2, column=0, sticky="e", padx=5)
+        self.pass_entry = ttk.Entry(frame, show="*", width=25)
+        self.pass_entry.grid(row=2, column=1, pady=8)
+        
+        ttk.Label(frame, text="Código 2FA:").grid(row=3, column=0, sticky="e", padx=5)
+        self.totp_entry = ttk.Entry(frame, width=25)
+        self.totp_entry.grid(row=3, column=1, pady=8)
         
         btn_frame = ttk.Frame(frame)
         btn_frame.grid(row=4, column=0, columnspan=2, pady=20)
         
-        ttk.Button(btn_frame, text="Login", command=self.do_login).pack(side="left", padx=5)
-        ttk.Button(btn_frame, text="Registrar", command=self.do_register).pack(side="left", padx=5)
+        ttk.Button(btn_frame, text="Entrar", command=self.do_login, width=12).pack(side="left", padx=5)
+        ttk.Button(btn_frame, text="Voltar", command=self.build_welcome_ui, width=12).pack(side="left", padx=5)
+
+    def build_register_ui(self):
+        """Tela de registro para novos usuários"""
+        self.clear_window()
+        
+        frame = ttk.Frame(self.root, padding="30")
+        frame.place(relx=0.5, rely=0.5, anchor="center")
+        
+        ttk.Label(frame, text="Criar Nova Conta", font=('Helvetica', 16, 'bold')).grid(row=0, column=0, columnspan=2, pady=20)
+        
+        ttk.Label(frame, text="Usuário:").grid(row=1, column=0, sticky="e", padx=5)
+        self.user_entry = ttk.Entry(frame, width=25)
+        self.user_entry.grid(row=1, column=1, pady=8)
+        
+        ttk.Label(frame, text="Senha:").grid(row=2, column=0, sticky="e", padx=5)
+        self.pass_entry = ttk.Entry(frame, show="*", width=25)
+        self.pass_entry.grid(row=2, column=1, pady=8)
+        
+        ttk.Label(frame, text="(Você irá configurar 2FA na próxima etapa)", font=('Helvetica', 9, 'italic')).grid(row=3, column=0, columnspan=2, pady=5)
+        
+        btn_frame = ttk.Frame(frame)
+        btn_frame.grid(row=4, column=0, columnspan=2, pady=20)
+        
+        ttk.Button(btn_frame, text="Prosseguir", command=self.do_register, width=12).pack(side="left", padx=5)
+        ttk.Button(btn_frame, text="Voltar", command=self.build_welcome_ui, width=12).pack(side="left", padx=5)
 
     def build_main_ui(self):
         self.clear_window()
@@ -410,11 +451,12 @@ class ChatGUI:
         self.chat_history.config(state='disabled')
 
     def show_qr_code(self, username, secret):
+        """Mostra QR Code em janela maximizada após registro"""
         # Generate Provisioning URI
         uri = f"otpauth://totp/SerpentChat:{username}?secret={secret}&issuer=SerpentChat"
         
-        # Generate QR Code
-        qr = qrcode.QRCode(version=1, box_size=10, border=5)
+        # Generate QR Code (optimized size to fit in window)
+        qr = qrcode.QRCode(version=1, box_size=8, border=4)
         qr.add_data(uri)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
@@ -422,23 +464,83 @@ class ChatGUI:
         # Convert to ImageTk
         self.qr_image = ImageTk.PhotoImage(img)
         
-        # Show Dialog
+        # Create fullscreen window
         top = tk.Toplevel(self.root)
-        top.title("Configurar 2FA")
-        top.geometry("400x500")
+        top.title("Configurar Autenticação de Dois Fatores")
+        
+        # Maximize window
+        top.state('zoomed')  # Windows
+        # top.attributes('-zoomed', True)  # Linux alternative
         
         # Keep reference to image to prevent Garbage Collection
         top.qr_image = self.qr_image
         
-        ttk.Label(top, text="Escaneie este QR Code", font=('Helvetica', 14, 'bold')).pack(pady=10)
+        # Create canvas with scrollbar
+        canvas = tk.Canvas(top)
+        scrollbar = ttk.Scrollbar(top, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas, padding="20")
         
-        lbl_img = ttk.Label(top, image=top.qr_image)
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        # Create window centered
+        canvas_window = canvas.create_window((0, 0), window=scrollable_frame, anchor="n")
+        
+        # Center the content horizontally
+        def center_window(event):
+            canvas_width = event.width
+            canvas.itemconfig(canvas_window, width=canvas_width)
+        
+        canvas.bind('<Configure>', center_window)
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        # Enable mouse wheel scrolling
+        def on_mousewheel(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        
+        canvas.bind_all("<MouseWheel>", on_mousewheel)
+        
+        # Unbind when window closes
+        def on_close():
+            canvas.unbind_all("<MouseWheel>")
+            top.destroy()
+        
+        top.protocol("WM_DELETE_WINDOW", on_close)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        # Content
+        ttk.Label(scrollable_frame, text="Configurar Autenticação de Dois Fatores", font=('Helvetica', 18, 'bold')).pack(pady=10)
+        ttk.Label(scrollable_frame, text="Escaneie este código com seu aplicativo autenticador:", font=('Helvetica', 12)).pack(pady=5)
+        ttk.Label(scrollable_frame, text="(Google Authenticator, Authy, Microsoft Authenticator, etc.)", font=('Helvetica', 10, 'italic')).pack(pady=3)
+        
+        # QR Code image
+        lbl_img = ttk.Label(scrollable_frame, image=top.qr_image)
         lbl_img.pack(pady=10)
         
-        ttk.Label(top, text=f"Segredo Manual: {secret}", font=('Courier', 10)).pack(pady=5)
-        ttk.Label(top, text="Use seu app autenticador (Google Auth, Authy, etc)", font=('Helvetica', 9)).pack(pady=5)
+        # Secret text
+        ttk.Label(scrollable_frame, text="Código Manual (se preferir configurar manualmente):", font=('Helvetica', 10)).pack(pady=5)
+        secret_frame = ttk.Frame(scrollable_frame)
+        secret_frame.pack(pady=3)
+        secret_entry = ttk.Entry(secret_frame, font=('Courier', 12, 'bold'), width=len(secret)+4, justify='center')
+        secret_entry.insert(0, secret)
+        secret_entry.config(state='readonly')
+        secret_entry.pack()
         
-        ttk.Button(top, text="OK", command=top.destroy).pack(pady=20)
+        # Instructions
+        ttk.Separator(scrollable_frame, orient='horizontal').pack(fill='x', pady=10)
+        ttk.Label(scrollable_frame, text="⚠️ Guarde este código em local seguro!", font=('Helvetica', 11, 'bold'), foreground='red').pack(pady=3)
+        ttk.Label(scrollable_frame, text="Você precisará do aplicativo autenticador para fazer login.", font=('Helvetica', 10)).pack(pady=3)
+        
+        # Finish button that redirects to login
+        def finish_registration():
+            top.destroy()
+            self.build_login_ui()
+        
+        ttk.Button(scrollable_frame, text="Concluir", command=finish_registration, width=20).pack(pady=15)
         
         # Force update to ensure rendering
         top.update()
