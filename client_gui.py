@@ -206,16 +206,26 @@ class ChatGUI:
         
         # Rooms List
         ttk.Label(sidebar, text="Suas Salas", style="Bold.TLabel").pack(anchor="w")
-        self.rooms_listbox = tk.Listbox(sidebar, height=15)
-        self.rooms_listbox.pack(fill="x", pady=5)
+        
+        # Container for rooms list and empty state
+        rooms_container = ttk.Frame(sidebar, height=200)
+        rooms_container.pack(fill="x", pady=5)
+        rooms_container.pack_propagate(False)  # Maintain fixed height
+        
+        self.rooms_listbox = tk.Listbox(rooms_container, height=15)
+        self.rooms_listbox.pack(fill="both", expand=True)
         self.rooms_listbox.bind('<<ListboxSelect>>', self.on_room_select)
         
         # Empty state label for when no rooms exist
-        self.empty_rooms_label = ttk.Label(sidebar,
-                                           text="Você ainda não entrou\nem nenhuma sala.\n\nCrie uma conversa usando\nos botões abaixo! 👇",
+        self.empty_rooms_label = ttk.Label(rooms_container,
+                                           text="Você ainda não entrou\nem nenhuma sala.\n\nCrie ou entre em uma conversa\nusando os botões abaixo! 👇",
                                            font=('Helvetica', 9, 'italic'),
                                            foreground='gray',
-                                           justify='center')
+                                           justify='center',
+                                           anchor='center',
+                                           background='white',
+                                           relief='sunken',
+                                           padding=20)
         
         # Buttons
         btn_frame = ttk.Frame(sidebar)
@@ -247,6 +257,9 @@ class ChatGUI:
         self.msg_entry.bind("<Return>", lambda e: self.send_message())
         
         ttk.Button(input_frame, text="Enviar", command=self.send_message).pack(side="right")
+        
+        # Initialize rooms list display (will show empty state if no rooms)
+        self.update_rooms_list()
 
     def clear_window(self):
         for widget in self.root.winfo_children():
@@ -453,12 +466,12 @@ class ChatGUI:
         # Show/hide empty state based on rooms count
         if len(self.rooms) == 0 and hasattr(self, 'empty_rooms_label'):
             self.rooms_listbox.pack_forget()
-            self.empty_rooms_label.pack(fill="x", pady=20)
+            self.empty_rooms_label.pack(fill="both", expand=True)
         else:
             if hasattr(self, 'empty_rooms_label'):
                 self.empty_rooms_label.pack_forget()
             if not self.rooms_listbox.winfo_ismapped():
-                self.rooms_listbox.pack(fill="x", pady=5)
+                self.rooms_listbox.pack(fill="both", expand=True)
             
             for r_id, r_data in self.rooms.items():
                 self.rooms_listbox.insert(tk.END, f"{r_id}: {r_data['name']} ({r_data['type']})")
