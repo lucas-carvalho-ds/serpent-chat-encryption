@@ -143,6 +143,7 @@ class ChatGUI:
         ttk.Label(frame, text="Usuário:").grid(row=1, column=0, sticky="e", padx=5)
         self.user_entry = ttk.Entry(frame, width=25)
         self.user_entry.grid(row=1, column=1, pady=8)
+        self.user_entry.focus()  # Auto-focus
         
         ttk.Label(frame, text="Senha:").grid(row=2, column=0, sticky="e", padx=5)
         self.pass_entry = ttk.Entry(frame, show="*", width=25)
@@ -170,15 +171,20 @@ class ChatGUI:
         ttk.Label(frame, text="Usuário:").grid(row=1, column=0, sticky="e", padx=5)
         self.user_entry = ttk.Entry(frame, width=25)
         self.user_entry.grid(row=1, column=1, pady=8)
+        self.user_entry.focus()  # Auto-focus
         
         ttk.Label(frame, text="Senha:").grid(row=2, column=0, sticky="e", padx=5)
         self.pass_entry = ttk.Entry(frame, show="*", width=25)
         self.pass_entry.grid(row=2, column=1, pady=8)
         
-        ttk.Label(frame, text="(Você irá configurar 2FA na próxima etapa)", font=('Helvetica', 9, 'italic')).grid(row=3, column=0, columnspan=2, pady=5)
+        ttk.Label(frame, text="Confirmar Senha:").grid(row=3, column=0, sticky="e", padx=5)
+        self.pass_confirm_entry = ttk.Entry(frame, show="*", width=25)
+        self.pass_confirm_entry.grid(row=3, column=1, pady=8)
+        
+        ttk.Label(frame, text="(Você irá configurar 2FA na próxima etapa)", font=('Helvetica', 9, 'italic')).grid(row=4, column=0, columnspan=2, pady=5)
         
         btn_frame = ttk.Frame(frame)
-        btn_frame.grid(row=4, column=0, columnspan=2, pady=20)
+        btn_frame.grid(row=5, column=0, columnspan=2, pady=20)
         
         ttk.Button(btn_frame, text="Prosseguir", command=self.do_register, width=12).pack(side="left", padx=5)
         ttk.Button(btn_frame, text="Voltar", command=self.build_welcome_ui, width=12).pack(side="left", padx=5)
@@ -372,17 +378,78 @@ class ChatGUI:
                 if self.active_room_id == r_id:
                     self.refresh_chat_history()
 
+    # --- Validation Methods ---
+    
+    def validate_username(self, username):
+        """Valida formato de username"""
+        username = username.strip()
+        if not username:
+            return False, "O nome de usuário não pode estar vazio."
+        if len(username) < 3:
+            return False, "O nome de usuário deve ter pelo menos 3 caracteres."
+        if len(username) > 20:
+            return False, "O nome de usuário não pode ter mais de 20 caracteres."
+        if not username.replace('_', '').isalnum():
+            return False, "O nome de usuário pode conter apenas letras, números e underscore (_)."
+        return True, ""
+    
+    def validate_password(self, password):
+        """Valida força de senha"""
+        if not password:
+            return False, "A senha não pode estar vazia."
+        if len(password) < 6:
+            return False, "A senha deve ter pelo menos 6 caracteres."
+        return True, ""
+    
+    def validate_registration(self, username, password, confirm_password):
+        """Valida dados de registro"""
+        # Validar username
+        valid, msg = self.validate_username(username)
+        if not valid:
+            return False, msg
+        
+        # Validar senha
+        valid, msg = self.validate_password(password)
+        if not valid:
+            return False, msg
+        
+        # Validar confirmação de senha
+        if password != confirm_password:
+            return False, "As senhas não coincidem."
+        
+        return True, ""
+    
+    def validate_login(self, username, password, totp_code):
+        """Valida dados de login"""
+        username = username.strip()
+        if not username:
+            return False, "O nome de usuário não pode estar vazio."
+        if not password:
+            return False, "A senha não pode estar vazia."
+        if not totp_code:
+            return False, "O código 2FA não pode estar vazio."
+        if not totp_code.isdigit() or len(totp_code) != 6:
+            return False, "O código 2FA deve conter exatamente 6 dígitos."
+        return True, ""
+
     # --- Actions ---
 
     def do_login(self):
         user = self.user_entry.get()
         pwd = self.pass_entry.get()
         totp = self.totp_entry.get()
-        self.username = user
+        
+        # Validate inputs
+        valid, msg = self.validate_login(user, pwd, totp)
+        if not valid:
+            messagebox.showerror("Erro de Validação", msg)
+            return
+        
+        self.username = user.strip()
         pub_key_pem = self.public_key.export_key().decode('utf-8')
         self.outgoing_queue.put({
             'action': 'login',
-            'username': user,
+            'username': self.username,
             'password': pwd,
             'totp_code': totp,
             'public_key': pub_key_pem
@@ -391,29 +458,88 @@ class ChatGUI:
     def do_register(self):
         user = self.user_entry.get()
         pwd = self.pass_entry.get()
+        confirm_pwd = self.pass_confirm_entry.get()
+        
+        # Validate inputs
+        valid, msg = self.validate_registration(user, pwd, confirm_pwd)
+        if not valid:
+            messagebox.showerror("Erro de Validação", msg)
+            return
+        
         pub_key_pem = self.public_key.export_key().decode('utf-8')
         self.outgoing_queue.put({
             'action': 'register',
-            'username': user,
+            'username': user.strip(),
             'password': pwd,
             'public_key': pub_key_pem
         })
 
     def create_private_chat(self):
         target = simpledialog.askstring("Nova Sala Individual", "Nome do usuário:")
-        if target:
-            self.outgoing_queue.put({'action': 'create_private_chat', 'target_username': target})
+        if not target:
+            return
+        
+        target = target.strip()
+        if not target:
+            messagebox.showerror("Erro", "O nome do usuário não pode estar vazio.")
+            return
+        
+        if target.lower() == self.username.lower():
+            messagebox.showerror("Erro", "Você não pode criar um chat com você mesmo.")
+            return
+        
+        # Validate username format
+        valid, msg = self.validate_username(target)
+        if not valid:
+            messagebox.showerror("Erro de Validação", msg)
+            return
+        
+        self.outgoing_queue.put({'action': 'create_private_chat', 'target_username': target})
 
     def create_group_chat(self):
         name = simpledialog.askstring("Nova Sala em Grupo", "Nome do Grupo:")
+        if not name:
+            return
+        
+        name = name.strip()
+        if not name:
+            messagebox.showerror("Erro", "O nome do grupo não pode estar vazio.")
+            return
+        
+        if len(name) < 3:
+            messagebox.showerror("Erro", "O nome do grupo deve ter pelo menos 3 caracteres.")
+            return
+        
+        if len(name) > 50:
+            messagebox.showerror("Erro", "O nome do grupo não pode ter mais de 50 caracteres.")
+            return
+        
         members = simpledialog.askstring("Membros", "Usuários (separados por vírgula):")
-        if name and members:
-            member_list = [m.strip() for m in members.split(',')]
-            self.outgoing_queue.put({
-                'action': 'create_group_chat',
-                'group_name': name,
-                'members': member_list
-            })
+        if not members:
+            return
+        
+        members = members.strip()
+        if not members:
+            messagebox.showerror("Erro", "Você deve adicionar pelo menos um membro.")
+            return
+        
+        member_list = [m.strip() for m in members.split(',') if m.strip()]
+        if not member_list:
+            messagebox.showerror("Erro", "Você deve adicionar pelo menos um membro válido.")
+            return
+        
+        # Validate each member username
+        for member in member_list:
+            valid, msg = self.validate_username(member)
+            if not valid:
+                messagebox.showerror("Erro de Validação", f"Membro '{member}': {msg}")
+                return
+        
+        self.outgoing_queue.put({
+            'action': 'create_group_chat',
+            'group_name': name,
+            'members': member_list
+        })
 
     def join_room_dialog(self):
         r_id = simpledialog.askinteger("Entrar em Sala em Grupo", "ID da Sala:")
@@ -440,7 +566,16 @@ class ChatGUI:
 
     def send_message(self):
         text = self.msg_entry.get().strip()
-        if not text or not self.active_room_id: return
+        
+        # Validate that there's an active room
+        if not self.active_room_id:
+            messagebox.showwarning("Aviso", "Por favor, selecione uma sala antes de enviar mensagens.")
+            return
+        
+        # Validate message not empty
+        if not text:
+            messagebox.showwarning("Aviso", "A mensagem não pode estar vazia.")
+            return
         
         cipher = self.room_ciphers[self.active_room_id]
         key = self.room_keys[self.active_room_id]
