@@ -289,8 +289,9 @@ class ChatGUI:
             self.main_screen.chat_header.config(text=f"Chat: {self.rooms[r_id]['name']}")
             self.refresh_chat_history()
             
-            # Request history update
-            self.outgoing_queue.put({'action': 'get_room_history', 'room_id': r_id})
+            # Only request history if we haven't loaded it yet
+            if not self.rooms[r_id]['history']:
+                self.outgoing_queue.put({'action': 'get_room_history', 'room_id': r_id})
     
     def send_message(self):
         """Send message to active room"""
@@ -364,7 +365,8 @@ class ChatGUI:
             'on_room_history': self.handle_room_history,
             'on_left_room': self.handle_left_room,
             'on_room_members': self.handle_room_members,
-            'on_available_groups': self.handle_available_groups
+            'on_available_groups': self.handle_available_groups,
+            'on_key_rotated': self.handle_key_rotated
         }
         MessageHandler.process_message(message, context)
 
@@ -388,16 +390,27 @@ class ChatGUI:
                 }
             )
         
+        # Add or update room
+        if r_id not in self.rooms:
+            self.rooms[r_id] = {'name': name, 'type': r_type, 'history': []}
+        
         self.update_rooms_list()
         
-        # Only show notification if the server explicitly flags it as new for this user
-        if is_new and self.main_screen:
-             text = notification_text if notification_text else f"Você foi adicionado ao chat: {name}"
-             messagebox.showinfo("Novo Chat", text)
+        # Request history immediately for newly joined/created rooms
+        if is_new:
+            self.outgoing_queue.put({'action': 'get_room_history', 'room_id': r_id})
+        
+        # Show notification only for truly new rooms
+        if is_new and notification_text:
+            messagebox.showinfo("Nova Sala", notification_text)
+        elif is_new:
+            messagebox.showinfo("Nova Sala", f"Você entrou em: {name}")
 
     def handle_room_history(self, r_id, history):
         """Handle received room history"""
         if r_id in self.rooms:
+            # Replace history with server data
+            # System messages broadcast after this will be appended via handle_new_message
             self.rooms[r_id]['history'] = history
             
             # If this is the active room, refresh the display
@@ -446,6 +459,28 @@ class ChatGUI:
         
         dialog = RoomMembersDialog(self.root, room_name, member_usernames, online_members)
         dialog.show()
+    
+    def handle_key_rotated(self, room_id, reason):
+        """Handle room key rotation"""
+        if room_id in self.rooms:
+            room_name = self.rooms[room_id]['name']
+            room_key = self.room_keys[room_id]
+            
+            # Log the key rotation
+            self.key_logger.log_event(
+                'ROOM_KEY_ROTATED',
+                f'Chave rotacionada para: {room_name}',
+                key_data={
+                    'key_length': len(room_key),
+                    'key_hash': str(hash(room_key.hex()))[:16]
+                },
+                context={
+                    'room_id': room_id,
+                    'room_name': room_name,
+                    'reason': reason,
+                    'username': self.username
+                }
+            )
     
     def show_qr_with_username(self, secret):
         """Show QR code after registration"""

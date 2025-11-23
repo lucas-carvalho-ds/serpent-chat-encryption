@@ -131,17 +131,28 @@ class MessageHandler:
                             dec = cipher.decrypt(iv, content).decode('utf-8')
                             
                             timestamp = m.get('timestamp', '')
+                            sender = m.get('sender', 'Unknown')
+                            
                             try:
                                 if ' ' in timestamp:
                                     time_part = timestamp.split(' ')[1][:5]
-                                    history_text.append(f"[{time_part}] [{m['sender']}]: {dec}")
+                                    # Format system messages differently
+                                    if sender == 'System':
+                                        history_text.append(f"[{time_part}] [Sistema]: {dec}")
+                                    else:
+                                        history_text.append(f"[{time_part}] [{sender}]: {dec}")
                                 else:
-                                    history_text.append(f"[{m['sender']}]: {dec}")
+                                    if sender == 'System':
+                                        history_text.append(f"[Sistema]: {dec}")
+                                    else:
+                                        history_text.append(f"[{sender}]: {dec}")
                             except:
-                                history_text.append(f"[{m['sender']}]: {dec}")
+                                if sender == 'System':
+                                    history_text.append(f"[Sistema]: {dec}")
+                                else:
+                                    history_text.append(f"[{sender}]: {dec}")
                     except:
                         pass
-                context['rooms'][r_id]['history'] = history_text
                 context['rooms'][r_id]['history'] = history_text
                 context['on_room_history'](r_id, history_text)
 
@@ -163,6 +174,26 @@ class MessageHandler:
             groups = message.get('groups')
             if 'on_available_groups' in context:
                 context['on_available_groups'](groups)
+
+        # Handle key rotation
+        elif action == 'key_rotated':
+            r_id = message.get('room_id')
+            new_key_hex = message.get('new_key')
+            reason = message.get('reason', 'unknown')
+            
+            if r_id in context['rooms']:
+                try:
+                    enc_key = bytes.fromhex(new_key_hex)
+                    key = CryptoUtils.decrypt_rsa(context['private_key'], enc_key)
+                    context['room_keys'][r_id] = key
+                    context['room_ciphers'][r_id] = SerpentCipher(key)
+                    
+                    if 'on_key_rotated' in context:
+                        context['on_key_rotated'](r_id, reason)
+                    
+                    log.info(f"Chave da sala {r_id} rotacionada. Motivo: {reason}")
+                except Exception as e:
+                    log.error(f"Falha ao atualizar chave rotacionada: {e}")
 
         # Handle system message
         elif action == 'system_message':

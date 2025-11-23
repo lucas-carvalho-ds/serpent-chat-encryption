@@ -51,14 +51,12 @@ class Database:
             )
         ''')
 
-
-
         # Tabela de Mensagens
-        # Nota: room_id agora referencia rooms(id)
+        # sender_id pode ser NULL para mensagens do sistema
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                sender_id INTEGER NOT NULL,
+                sender_id INTEGER,
                 room_id INTEGER NOT NULL, 
                 content_encrypted BLOB NOT NULL,
                 iv BLOB NOT NULL,
@@ -259,6 +257,15 @@ class Database:
             return row[0]
         return None
 
+    def update_room_key(self, room_id, new_key):
+        """Atualiza a chave de criptografia de uma sala"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute('UPDATE rooms SET serpent_key = ? WHERE id = ?', (new_key, room_id))
+        conn.commit()
+        conn.close()
+        log.info(f"Chave da sala {room_id} atualizada.")
+
     # --- Messages ---
 
     def save_message(self, sender_id, room_id, content_encrypted, iv, signature):
@@ -273,6 +280,25 @@ class Database:
         conn.close()
         log.debug(f"Mensagem salva no DB. ID: {msg_id}")
         return msg_id
+
+    def update_message_content(self, msg_id, new_content_encrypted):
+        """Atualiza o conteúdo criptografado de uma mensagem"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute('UPDATE messages SET content_encrypted = ? WHERE id = ?', (new_content_encrypted, msg_id))
+        conn.commit()
+        conn.close()
+
+    def update_message_content_and_signature(self, msg_id, new_content_encrypted, new_signature):
+        """Atualiza o conteúdo criptografado e assinatura de uma mensagem"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            'UPDATE messages SET content_encrypted = ?, signature = ? WHERE id = ?',
+            (new_content_encrypted, new_signature, msg_id)
+        )
+        conn.commit()
+        conn.close()
 
     def get_messages_for_room(self, room_id, min_timestamp=None):
         """Retorna mensagens de uma sala específica, opcionalmente filtradas por timestamp."""

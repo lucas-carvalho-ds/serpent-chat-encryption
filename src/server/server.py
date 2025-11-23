@@ -6,6 +6,7 @@ from src.server.auth import AuthManager
 from src.common.crypto_utils import CryptoUtils
 from pyserpent import Serpent
 from src.common.logger_config import setup_logger
+from pyserpent import serpent_cbc_encrypt, serpent_cbc_decrypt
 
 log = setup_logger(__name__)
 
@@ -235,8 +236,15 @@ class ChatServer:
         user_data = self.db.get_user_by_username(username)
         user_id = user_data[0]
         
+        # Verificar tipo da sala antes de remover
+        room_type = self.db.get_room_type(room_id)
+        
         # Remover do banco
         self.db.remove_room_member(room_id, user_id)
+        
+        # Rotacionar chave se for chat em grupo (não para chats privados)
+        if room_type == 'group':
+            await self.rotate_room_key(room_id, reason=f"{username}_left")
         
         # Notificar sucesso para o cliente remover da UI
         await self.broadcast_system_message(room_id, f"{username} saiu do chat.")
@@ -296,9 +304,104 @@ class ChatServer:
         await self.broadcast_system_message(room_id, f"{username} entrou no grupo.")
         return {'status': 'success', 'message': 'Entrou na sala com sucesso.'}
 
+    async def rotate_room_key(self, room_id, reason="member_left"):
+        """
+        Rotaciona a chave de criptografia de uma sala
+        
+        Args:
+            room_id: ID da sala
+            reason: Motivo da rotação (para logging)
+        """
+        
+        # Obter chave antiga antes de rotacionar
+        old_key = self.db.get_room_key(room_id)
+        
+        # Gerar nova chave
+        new_key = Serpent.generateIV() + Serpent.generateIV()
+        
+        # Re-criptografar mensagens existentes
+        try:
+            messages = self.db.get_messages_for_room(room_id)
+            re_encrypted_count = 0
+            
+            for msg in messages:
+                msg_id, sender_id, room_id_db, content_enc, iv, signature, timestamp, username = msg
+                
+                try:
+                    # Descriptografar com chave antiga
+                    decrypted = serpent_cbc_decrypt(old_key, content_enc, iv)
+                    
+                    # Criptografar com nova chave usando mesmo IV
+                    new_content_enc = serpent_cbc_encrypt(new_key, decrypted, iv)
+                    
+                    # Recalcular assinatura com nova chave
+                    new_signature = CryptoUtils.sign_message(new_key, new_content_enc)
+                    
+                    # Atualizar mensagem no banco (conteúdo e assinatura)
+                    self.db.update_message_content_and_signature(msg_id, new_content_enc, new_signature)
+                    re_encrypted_count += 1
+                except Exception as e:
+                    log.error(f"Falha ao re-criptografar mensagem {msg_id}: {e}")
+            
+            log.info(f"Re-criptografadas {re_encrypted_count} mensagens da sala {room_id}")
+        except Exception as e:
+            log.error(f"Erro ao re-criptografar mensagens: {e}")
+        
+        # Atualizar no banco de dados
+        self.db.update_room_key(room_id, new_key)
+        
+        # Obter membros da sala
+        member_ids = self.db.get_room_members(room_id)
+        
+        # Enviar nova chave para todos os membros online
+        for user_id in member_ids:
+            user_data = self.db.get_user_by_id(user_id)
+            if user_data:
+                username = user_data[1]
+                if username in self.connected_clients:
+                    pub_key = self.client_keys.get(username)
+                    if pub_key:
+                        encrypted_key = CryptoUtils.encrypt_rsa(pub_key, new_key)
+                        await self.send_json(self.connected_clients[username], {
+                            'action': 'key_rotated',
+                            'room_id': room_id,
+                            'new_key': encrypted_key.hex(),
+                            'reason': reason
+                        })
+        
+        log.info(f"Chave da sala {room_id} rotacionada. Motivo: {reason}")
+
+
     async def broadcast_system_message(self, room_id, content):
-        """Broadcast a system message to room members"""
+        """Broadcast a system message to room members and save to database"""
         import datetime
+        
+        # Get room key to encrypt system message
+        room_key = self.db.get_room_key(room_id)
+        
+        if room_key:
+            # Encrypt system message
+            from src.common.crypto_utils import SerpentCipher
+            cipher = SerpentCipher(room_key)
+            iv, encrypted = cipher.encrypt(content)
+            
+            # Sign with room key (system messages signed by room key)
+            signature = CryptoUtils.sign_message(room_key, encrypted)
+            
+            # Save to database with sender_id = None to indicate system message
+            try:
+                self.db.save_message(
+                    sender_id=None,  # NULL indicates system message
+                    room_id=room_id,
+                    content_encrypted=encrypted,
+                    iv=iv,
+                    signature=signature
+                )
+                log.debug(f"System message saved to DB for room {room_id}")
+            except Exception as e:
+                log.error(f"Failed to save system message: {e}")
+        
+        # Broadcast to online members
         msg = {
             'action': 'system_message',
             'room_id': room_id,
@@ -409,13 +512,17 @@ class ChatServer:
         msgs = self.db.get_messages_for_room(room_id, min_timestamp=None)
         history = []
         for m in msgs:
-             history.append({
-                 'sender': m[7],
-                 'content': m[3].hex(),
-                 'iv': m[4].hex(),
-                 'signature': m[5].hex(),
-                 'timestamp': m[6]
-             })
+            # m[1] is sender_id, m[7] is username
+            # If sender_id (m[1]) is None, it's a system message
+            sender_name = m[7] if m[1] is not None else 'System'
+            
+            history.append({
+                'sender': sender_name,
+                'content': m[3].hex(),
+                'iv': m[4].hex(),
+                'signature': m[5].hex(),
+                'timestamp': m[6]
+            })
         return {'status': 'history', 'action': 'room_history', 'room_id': room_id, 'data': history}
 
     async def send_user_rooms(self, writer, username):
