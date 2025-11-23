@@ -24,7 +24,7 @@ class MemberSelectionDialog:
         self.mode = mode
         
         # Create dialog
-        title = "Criar Grupo" if mode == 'multiple' else "Nova Conversa"
+        title = "Novo Chat em Grupo" if mode == 'multiple' else "Novo Chat Individual"
         self.dialog = tk.Toplevel(parent)
         self.dialog.title(title)
         self.dialog.geometry("400x500")
@@ -133,7 +133,7 @@ class MemberSelectionDialog:
         btn_frame.pack(fill="x")
         
         ttk.Button(btn_frame, text="Cancelar", command=self.cancel, width=15).pack(side="right", padx=5)
-        btn_text = "Criar Grupo" if self.mode == 'multiple' else "Criar Conversa"
+        btn_text = "Criar" if self.mode == 'multiple' else "Criar"
         ttk.Button(btn_frame, text=btn_text, command=self.ok, width=15).pack(side="right")
         
         # Bind Enter key
@@ -267,3 +267,79 @@ class RoomMembersDialog:
     def show(self):
         """Show dialog"""
         self.dialog.wait_window()
+
+
+class JoinGroupDialog:
+    """Dialog for selecting a group to join"""
+    
+    def __init__(self, parent, available_groups):
+        """
+        Args:
+            parent: Parent window
+            available_groups: List of dicts {'id': int, 'name': str}
+        """
+        self.result = None
+        self.dialog = tk.Toplevel(parent)
+        self.dialog.title("Entrar em Grupo")
+        self.dialog.geometry("400x500")
+        self.dialog.attributes('-topmost', True)
+        self.dialog.transient(parent)
+        self.dialog.grab_set()
+        
+        # Center
+        self.dialog.update_idletasks()
+        x = (self.dialog.winfo_screenwidth() // 2) - (400 // 2)
+        y = (self.dialog.winfo_screenheight() // 2) - (500 // 2)
+        self.dialog.geometry(f"400x500+{x}+{y}")
+        
+        # Header
+        ttk.Label(self.dialog, text="Grupos Disponíveis", 
+                 font=('Helvetica', 12, 'bold')).pack(pady=10)
+        
+        # List
+        list_frame = ttk.Frame(self.dialog, padding="10")
+        list_frame.pack(fill="both", expand=True)
+        
+        scrollbar = ttk.Scrollbar(list_frame)
+        scrollbar.pack(side="right", fill="y")
+        
+        self.listbox = tk.Listbox(list_frame, yscrollcommand=scrollbar.set, font=('Helvetica', 10))
+        self.listbox.pack(side="left", fill="both", expand=True)
+        scrollbar.config(command=self.listbox.yview)
+        
+        self.groups_map = {} # index -> group_id
+        
+        if not available_groups:
+            self.listbox.insert(tk.END, "Nenhum grupo encontrado.")
+            self.listbox.config(state='disabled')
+        else:
+            for i, group in enumerate(available_groups):
+                self.listbox.insert(tk.END, f"{group['name']} (ID: {group['id']})")
+                self.groups_map[i] = group['id']
+        
+        # Buttons
+        btn_frame = ttk.Frame(self.dialog, padding="10")
+        btn_frame.pack(fill="x")
+        
+        ttk.Button(btn_frame, text="Cancelar", command=self.cancel).pack(side="right", padx=5)
+        ttk.Button(btn_frame, text="Entrar", command=self.join).pack(side="right")
+        
+        self.listbox.bind('<Double-Button-1>', lambda e: self.join())
+
+    def join(self):
+        selection = self.listbox.curselection()
+        if not selection:
+            return
+            
+        index = selection[0]
+        if index in self.groups_map:
+            self.result = self.groups_map[index]
+            self.dialog.destroy()
+    
+    def cancel(self):
+        self.result = None
+        self.dialog.destroy()
+    
+    def show(self):
+        self.dialog.wait_window()
+        return self.result

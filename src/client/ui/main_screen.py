@@ -22,11 +22,12 @@ class MainScreen:
         
     def build_ui(self, on_room_select_callback, on_send_callback, 
                  on_create_private_callback, on_create_group_callback, on_join_group_callback,
-                 on_leave_room_callback, on_view_members_callback, on_logout_callback):
+                 on_leave_room_callback, on_view_members_callback, on_logout_callback, on_close_view_callback):
         """Builds the main chat UI"""
         self.on_leave_room = on_leave_room_callback
         self.on_view_members = on_view_members_callback
         self.on_logout = on_logout_callback
+        self.on_close_view = on_close_view_callback
         # Clear window
         for widget in self.root.winfo_children():
             widget.destroy()
@@ -71,6 +72,7 @@ class MainScreen:
         self.room_context_menu = tk.Menu(self.root, tearoff=0)
         self.room_context_menu.add_command(label="Ver Participantes", command=self.view_room_members)
         self.room_context_menu.add_separator()
+        self.room_context_menu.add_command(label="Fechar Visualização", command=self.close_chat_view)
         self.room_context_menu.add_command(label="Sair do Chat", command=self.leave_room)
         
         # Empty state label for when no rooms exist
@@ -148,3 +150,8 @@ class MainScreen:
             r_id = int(item_text.split(':')[0])
             if self.on_view_members:
                 self.on_view_members(r_id)
+
+    def close_chat_view(self):
+        """Callback for closing chat view"""
+        if self.on_close_view:
+            self.on_close_view()

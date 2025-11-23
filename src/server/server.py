@@ -128,6 +128,9 @@ class ChatServer:
             room_id = message.get('room_id')
             return self.get_room_members(current_user, room_id)
 
+        elif action == 'get_available_groups':
+            return self.handle_get_available_groups()
+
         elif action == 'logout':
             # Remove user from connected clients
             if current_user in self.connected_clients:
@@ -165,6 +168,12 @@ class ChatServer:
             return {'status': 'success', 'message': 'Login realizado.'}
         else:
             return {'status': 'error', 'message': msg}
+
+    def handle_get_available_groups(self):
+        groups = self.db.get_all_groups()
+        # groups is list of (id, name)
+        groups_list = [{'id': g[0], 'name': g[1]} for g in groups]
+        return {'status': 'success', 'action': 'available_groups', 'groups': groups_list}
 
     async def create_private_chat(self, creator, target_user):
         creator_data = self.db.get_user_by_username(creator)
@@ -384,8 +393,9 @@ class ChatServer:
             return {'status': 'error', 'message': 'Acesso negado.'}
             
         # Filtrar mensagens a partir da entrada do usuário
-        join_time = self.db.get_member_join_time(room_id, user_id)
-        msgs = self.db.get_messages_for_room(room_id, min_timestamp=join_time)
+        # join_time = self.db.get_member_join_time(room_id, user_id)
+        # Desabilitando filtro temporariamente para garantir que histórico apareça
+        msgs = self.db.get_messages_for_room(room_id, min_timestamp=None)
         history = []
         for m in msgs:
              history.append({

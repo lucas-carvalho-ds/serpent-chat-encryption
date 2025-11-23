@@ -156,6 +156,12 @@ class MessageHandler:
             if 'on_room_members' in context:
                 context['on_room_members'](r_id, members)
 
+        # Handle available groups
+        elif action == 'available_groups':
+            groups = message.get('groups')
+            if 'on_available_groups' in context:
+                context['on_available_groups'](groups)
+
         # Handle system message
         elif action == 'system_message':
             r_id = message.get('room_id')

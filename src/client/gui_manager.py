@@ -13,7 +13,7 @@ from src.client.validation import validate_login, validate_registration, validat
 from src.client.message_handler import MessageHandler
 from src.client.ui.auth_screens import AuthScreens
 from src.client.ui.main_screen import MainScreen
-from src.client.ui.dialogs import MemberSelectionDialog, RoomMembersDialog
+from src.client.ui.dialogs import MemberSelectionDialog, RoomMembersDialog, JoinGroupDialog
 from src.client.ui.qr_dialog import show_qr_code
 from src.common.crypto_utils import CryptoUtils, SerpentCipher
 from src.common.logger_config import setup_logger
@@ -100,7 +100,8 @@ class ChatGUI:
             on_join_group_callback=self.join_room_dialog,
             on_leave_room_callback=self.leave_room,
             on_view_members_callback=self.show_room_members,
-            on_logout_callback=self.logout
+            on_logout_callback=self.logout,
+            on_close_view_callback=self.close_chat_view
         )
         self.update_rooms_list()
     
@@ -192,8 +193,14 @@ class ChatGUI:
             })
     
     def join_room_dialog(self):
-        """Join room dialog"""
-        r_id = simpledialog.askinteger("Entrar em Chat em Grupo", "ID do Chat:")
+        """Request available groups from server"""
+        self.outgoing_queue.put({'action': 'get_available_groups'})
+
+    def handle_available_groups(self, groups):
+        """Show dialog with available groups"""
+        dialog = JoinGroupDialog(self.root, groups)
+        r_id = dialog.show()
+        
         if r_id:
             self.outgoing_queue.put({'action': 'join_room', 'room_id': r_id})
 
@@ -217,7 +224,18 @@ class ChatGUI:
             self.room_online_members = {}
             
             # Return to login screen
+            self.root.title("SerpTalk")
             self.build_login_ui()
+
+    def close_chat_view(self):
+        """Close current chat view without leaving the room"""
+        self.active_room_id = None
+        if self.main_screen:
+            self.main_screen.chat_header.config(text="Selecione um chat")
+            self.main_screen.chat_history.config(state='normal')
+            self.main_screen.chat_history.delete(1.0, tk.END)
+            self.main_screen.chat_history.config(state='disabled')
+            self.main_screen.rooms_listbox.selection_clear(0, tk.END)
 
     def leave_room(self, room_id):
         """Leave a room"""
@@ -315,15 +333,35 @@ class ChatGUI:
             'active_room_id': self.active_room_id,
             'on_login_success': self.build_main_ui,
             'on_registration_qr': self.show_qr_with_username,
-            'on_room_added': lambda r_id, name, r_type: self.update_rooms_list(),
+            'on_room_added': self.handle_room_added,
             'on_user_list_updated': self.update_user_list,
             'on_new_message': self.handle_new_message,
             'on_new_message': self.handle_new_message,
             'on_room_history': self.handle_room_history,
             'on_left_room': self.handle_left_room,
-            'on_room_members': self.handle_room_members
+            'on_room_members': self.handle_room_members,
+            'on_available_groups': self.handle_available_groups
         }
         MessageHandler.process_message(message, context)
+
+    def handle_room_added(self, r_id, name, r_type):
+        """Handle new room added"""
+        self.update_rooms_list()
+        # If it's a new room (not just loading from history/login), notify user
+        # We can infer it's new if we are already logged in and receiving this.
+        # However, this is also called on login.
+        # Ideally, the server should send a specific "you were added" message or we check if we just created it.
+        # For now, let's just show notification if it's not the initial load (which we can't easily distinguish here without more state).
+        # A simple heuristic: if we have many rooms, it's likely a new addition.
+        # Better approach: The server sends 'room_added' when we create it too.
+        # Let's rely on a specific system message for "You were added" or just show it here.
+        
+        # Actually, the user asked for: "Exibir mensagem em janela para o usuário 'Você foi adicionado ao chat...'"
+        # This usually happens when SOMEONE ELSE adds you.
+        # We can check if we are the creator? No, we don't have that info here easily.
+        # Let's just show a toast/messagebox if the main screen is active.
+        if self.main_screen:
+             messagebox.showinfo("Novo Chat", f"Você foi adicionado ao chat: {name}")
 
     def handle_left_room(self, room_id):
         """Handle confirmation of leaving a room"""

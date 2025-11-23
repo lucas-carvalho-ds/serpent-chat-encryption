@@ -208,10 +208,18 @@ class Database:
         cursor = conn.cursor()
         cursor.execute('SELECT type FROM rooms WHERE id = ?', (room_id,))
         row = cursor.fetchone()
-        conn.close()
         if row:
             return row[0]
         return None
+
+    def get_all_groups(self):
+        """Retorna todas as salas do tipo 'group'."""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, name FROM rooms WHERE type = 'group'")
+        groups = cursor.fetchall()
+        conn.close()
+        return groups
 
     def get_private_chat_id(self, user1_id, user2_id):
         """Verifica se já existe um chat individual entre dois usuários."""
