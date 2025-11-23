@@ -19,6 +19,10 @@ Um sistema de chat seguro desenvolvido com foco nos 4 pilares da Segurança da I
 - **Criptografia Ponta-a-Ponta**: Cada sala possui chave Serpent exclusiva, distribuída via RSA.
 - **QR Code para 2FA**: Registro simplificado com QR Code escaneável para configurar o TOTP.
 - **Histórico Persistente**: Mensagens salvas criptografadas no banco de dados.
+- **Rotação Automática de Chaves**: Chaves são rotacionadas quando membros saem, garantindo forward secrecy.
+- **Re-criptografia de Mensagens**: Histórico completo é re-criptografado com nova chave durante rotação.
+- **Mensagens do Sistema Persistentes**: Auditoria completa de atividades do grupo (criação, entrada, saída).
+- **Visualização de Histórico de Chaves**: Rastreamento completo de eventos criptográficos com timestamps.
 - **Lista de Usuários Online**: Visualização em tempo real de usuários conectados com indicadores de status (🟢 online / ⚫ offline).
 - **Isolamento de Chaves por Sala**: Cada sala possui criptografia independente.
 - **Menu de Contexto**: Clique direito nas salas para ver participantes ou sair da sala.
@@ -45,7 +49,7 @@ Um sistema de chat seguro desenvolvido com foco nos 4 pilares da Segurança da I
 
 ## 🏃 Como Executar
 
-Consulte o [MANUAL.md](MANUAL.md) para instruções detalhadas de uso.
+Consulte o [MANUAL.md](docs/MANUAL.md) para instruções detalhadas de uso.
 
 ### Servidor
 

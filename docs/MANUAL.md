@@ -71,6 +71,7 @@ A janela principal é dividida em três áreas:
   - **"Novo Chat Individual"**: Criar chat individual com um usuário
   - **"Novo Chat em Grupo"**: Criar chat em grupo
   - **"Entrar em Chat em Grupo"**: Entrar em um chat existente pelo ID
+  - **"🔑 Ver Histórico de Chaves"**: Visualizar todos os eventos criptográficos
 - **Botão Sair (Logout)**: No topo da barra lateral, para fazer logout com segurança
 
 #### Área Central
@@ -126,6 +127,16 @@ A janela principal é dividida em três áreas:
 
 Ao selecionar um chat, o histórico de mensagens anteriores é carregado automaticamente e descriptografado localmente no seu cliente.
 
+### 3.10. Visualizando Histórico de Chaves
+
+1. Clique no botão **"🔑 Ver Histórico de Chaves"** na barra lateral
+2. Uma janela será aberta mostrando:
+   - Lista cronológica de eventos criptográficos
+   - Tipo de evento (geração RSA, chave de sala recebida, rotação)
+   - Timestamp exato
+   - Detalhes contextuais (nome da sala, motivo, etc.)
+3. Use o botão **"Limpar Histórico"** para apagar logs antigos (ação irreversível)
+
 ## 4. Funcionalidades de Segurança Explicadas
 
 ### Criptografia Serpent
@@ -166,6 +177,61 @@ Cada mensagem é assinada com **HMAC-SHA256**:
 - Previne ataques de modificação mesmo se a criptografia for quebrada
 - Verifica a autenticidade do remetente
 
+### Rotação de Chaves e Forward Secrecy
+
+O sistema implementa **rotação automática de chaves** para garantir forward secrecy:
+
+**Quando ocorre:**
+
+- Automaticamente quando um membro sai de um grupo
+
+**Como funciona:**
+
+1. Nova chave Serpent é gerada para a sala
+2. **Todas as mensagens antigas são re-criptografadas** com a nova chave
+3. Nova chave é distribuída para membros restantes
+4. Membro que saiu **não pode mais descriptografar mensagens futuras**
+
+**Benefícios:**
+
+- Protege conversas futuras mesmo se chaves antigas forem comprometidas
+- Mantém histórico completo acessível para membros atuais
+- Garante que usuários removidos perdem acesso imediatamente
+
+### Visualização de Histórico de Chaves
+
+Você pode visualizar todos os eventos criptográficos no menu **"🔑 Ver Histórico de Chaves"**:
+
+**Eventos rastreados:**
+
+- Geração de chaves RSA
+- Recebimento de chaves de sala
+- Rotação de chaves (com motivo)
+
+**Informações exibidas:**
+
+- Timestamp exato do evento
+- Tipo de evento
+- Contexto (nome da sala, usuário, etc.)
+- Hash da chave (para verificação)
+
+### Persistência de Mensagens do Sistema
+
+Todas as atividades do grupo são registradas e persistidas no banco de dados:
+
+**Mensagens rastreadas:**
+
+- "Usuário criou o grupo"
+- "Usuário entrou no grupo"
+- "Usuário saiu do chat"
+
+**Características:**
+
+- Criptografadas com a chave da sala (como mensagens normais)
+- Exibidas com label **[Sistema]** no chat
+- Visíveis no histórico após logout/login
+- Re-criptografadas durante rotação de chaves
+
 ## 5. Solução de Problemas
 
 ### Problemas Comuns
@@ -193,7 +259,7 @@ Cada mensagem é assinada com **HMAC-SHA256**:
 
 - **"Não foi possível conectar ao servidor"**:
 
-  - Verifique se o servidor está rodando (`python server.py`)
+  - Verifique se o servidor está rodando (`python -m src.server.server`)
   - Confirme que a porta 8888 não está bloqueada por firewall
   - Por padrão, o servidor escuta em `127.0.0.1:8888` (localhost)
 
