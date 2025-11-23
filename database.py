@@ -178,6 +178,28 @@ class Database:
         conn.close()
         return members
 
+    def get_member_join_time(self, room_id, user_id):
+        """Retorna o timestamp de quando o usuário entrou na sala."""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT joined_at FROM room_members WHERE room_id = ? AND user_id = ?', (room_id, user_id))
+        row = cursor.fetchone()
+        conn.close()
+        if row:
+            return row[0]
+        return None
+
+    def get_room_type(self, room_id):
+        """Retorna o tipo da sala ('private' ou 'group')."""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT type FROM rooms WHERE id = ?', (room_id,))
+        row = cursor.fetchone()
+        conn.close()
+        if row:
+            return row[0]
+        return None
+
     def get_private_chat_id(self, user1_id, user2_id):
         """Verifica se já existe um chat individual entre dois usuários."""
         conn = self.get_connection()
@@ -234,17 +256,26 @@ class Database:
         log.debug(f"Mensagem salva no DB. ID: {msg_id}")
         return msg_id
 
-    def get_messages_for_room(self, room_id):
-        """Retorna mensagens de uma sala específica."""
+    def get_messages_for_room(self, room_id, min_timestamp=None):
+        """Retorna mensagens de uma sala específica, opcionalmente filtradas por timestamp."""
         conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
+        
+        query = '''
             SELECT m.id, m.sender_id, m.room_id, m.content_encrypted, m.iv, m.signature, m.timestamp, u.username
             FROM messages m
             JOIN users u ON m.sender_id = u.id
             WHERE m.room_id = ?
-            ORDER BY m.timestamp ASC
-        ''', (room_id,))
+        '''
+        params = [room_id]
+        
+        if min_timestamp:
+            query += ' AND m.timestamp >= ?'
+            params.append(min_timestamp)
+            
+        query += ' ORDER BY m.timestamp ASC'
+        
+        cursor.execute(query, params)
         messages = cursor.fetchall()
         conn.close()
         return messages

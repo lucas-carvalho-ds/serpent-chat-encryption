@@ -179,12 +179,7 @@ class ChatGUI:
         # Show member selection dialog
         dialog = MemberSelectionDialog(self.root, all_usernames, self.username, online_usernames, mode='multiple')
         
-        if not all_users or (len(all_users) == 1 and self.username in all_users):
-            messagebox.showinfo("Info", "Não há outros usuários disponíveis para criar um grupo.")
-            return
-        
-        # Show member selection dialog
-        dialog = MemberSelectionDialog(self.root, all_users, self.username, self.online_users)
+
         result = dialog.show()
         
         if result:

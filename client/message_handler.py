@@ -95,7 +95,17 @@ class MessageHandler:
                     
                     if CryptoUtils.verify_signature(key, content_bytes, sig_bytes):
                         decrypted = cipher.decrypt(iv_bytes, content_bytes).decode('utf-8')
-                        formatted_msg = f"[{sender}]: {decrypted}"
+                        
+                        timestamp = message.get('timestamp', '')
+                        # Format timestamp to HH:MM if possible, or keep as is
+                        try:
+                            if ' ' in timestamp:
+                                time_part = timestamp.split(' ')[1][:5] # HH:MM
+                                formatted_msg = f"[{time_part}] [{sender}]: {decrypted}"
+                            else:
+                                formatted_msg = f"[{sender}]: {decrypted}"
+                        except:
+                            formatted_msg = f"[{sender}]: {decrypted}"
                         
                         context['rooms'][r_id]['history'].append(formatted_msg)
                         context['on_new_message'](r_id, formatted_msg)
@@ -117,7 +127,16 @@ class MessageHandler:
                         sig = bytes.fromhex(m['signature'])
                         if CryptoUtils.verify_signature(key, content, sig):
                             dec = cipher.decrypt(iv, content).decode('utf-8')
-                            history_text.append(f"[{m['sender']}]: {dec}")
+                            
+                            timestamp = m.get('timestamp', '')
+                            try:
+                                if ' ' in timestamp:
+                                    time_part = timestamp.split(' ')[1][:5]
+                                    history_text.append(f"[{time_part}] [{m['sender']}]: {dec}")
+                                else:
+                                    history_text.append(f"[{m['sender']}]: {dec}")
+                            except:
+                                history_text.append(f"[{m['sender']}]: {dec}")
                     except:
                         pass
                 context['rooms'][r_id]['history'] = history_text

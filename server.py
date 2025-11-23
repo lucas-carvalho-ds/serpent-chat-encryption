@@ -222,9 +222,15 @@ class ChatServer:
         
         # Verificar se sala existe
         # Podemos usar get_room_key para verificar existência
-        room_key = self.db.get_room_key(room_id)
-        if not room_key:
+        # Verificar se sala existe e tipo
+        room_type = self.db.get_room_type(room_id)
+        if not room_type:
              return {'status': 'error', 'message': 'Sala não encontrada.'}
+        
+        if room_type == 'private':
+             return {'status': 'error', 'message': 'Não é permitido entrar salas individuais.'}
+             
+        room_key = self.db.get_room_key(room_id)
              
         # Adicionar membro
         success = self.db.add_room_member(room_id, user_id)
@@ -313,13 +319,15 @@ class ChatServer:
         return {'status': 'success'}
 
     async def broadcast_room_message(self, room_id, members_ids, sender, content, iv, signature):
+        import datetime
         msg = {
             'action': 'new_message',
             'room_id': room_id,
             'sender': sender,
             'content': content,
             'iv': iv,
-            'signature': signature
+            'signature': signature,
+            'timestamp': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
         
         for user_id in members_ids:
@@ -338,7 +346,9 @@ class ChatServer:
         if user_id not in members:
             return {'status': 'error', 'message': 'Acesso negado.'}
             
-        msgs = self.db.get_messages_for_room(room_id)
+        # Filtrar mensagens a partir da entrada do usuário
+        join_time = self.db.get_member_join_time(room_id, user_id)
+        msgs = self.db.get_messages_for_room(room_id, min_timestamp=join_time)
         history = []
         for m in msgs:
              history.append({
