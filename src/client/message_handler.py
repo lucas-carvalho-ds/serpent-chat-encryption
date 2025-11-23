@@ -4,8 +4,8 @@ Processes incoming messages from the server and updates the application state.
 """
 
 from tkinter import messagebox
-from crypto_utils import CryptoUtils, SerpentCipher
-from logger_config import setup_logger
+from src.common.crypto_utils import CryptoUtils, SerpentCipher
+from src.common.logger_config import setup_logger
 
 log = setup_logger(__name__)
 

@@ -1,7 +1,7 @@
 import pyotp
-from database import Database
-from crypto_utils import CryptoUtils
-from logger_config import setup_logger
+from src.server.database import Database
+from src.common.crypto_utils import CryptoUtils
+from src.common.logger_config import setup_logger
 
 log = setup_logger(__name__)
 

@@ -6,9 +6,9 @@ import pyotp
 # Adicionar diretório pai ao path para importar módulos
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from crypto_utils import CryptoUtils, SerpentCipher
-from auth import AuthManager
-from database import Database
+from src.common.crypto_utils import CryptoUtils, SerpentCipher
+from src.server.auth import AuthManager
+from src.server.database import Database
 
 class TestSecurity(unittest.TestCase):
     def setUp(self):

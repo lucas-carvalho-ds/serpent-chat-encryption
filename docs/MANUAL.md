@@ -17,7 +17,7 @@ O Serpent Chat é uma ferramenta de comunicação que prioriza a segurança. Ele
 O servidor deve estar rodando para que os clientes possam se conectar.
 
 ```bash
-python server.py
+python -m src.server.server
 ```
 
 _O servidor escuta na porta 8888 por padrão e será indicado como "Servidor rodando em 0.0.0.0:8888"._
@@ -27,7 +27,7 @@ _O servidor escuta na porta 8888 por padrão e será indicado como "Servidor rod
 Para entrar no chat usando a interface gráfica:
 
 ```bash
-python -m client.main
+python -m src.client.main
 ```
 
 ## 3. Usando a Interface Gráfica (GUI)

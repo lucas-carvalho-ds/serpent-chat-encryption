@@ -4,7 +4,7 @@ Fully modular architecture with separated concerns.
 """
 
 import tkinter as tk
-from client.gui_manager import ChatGUI
+from src.client.gui_manager import ChatGUI
 
 
 def main():

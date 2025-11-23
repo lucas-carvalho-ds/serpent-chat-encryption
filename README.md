@@ -50,7 +50,7 @@ Consulte o [MANUAL.md](MANUAL.md) para instruções detalhadas de uso.
 ### Servidor
 
 ```bash
-python server.py
+python -m src.server.server
 ```
 
 _O servidor escuta na porta 8888 por padrão._
@@ -58,7 +58,7 @@ _O servidor escuta na porta 8888 por padrão._
 ### Cliente
 
 ```bash
-python -m client.main
+python -m src.client.main
 ```
 
 ## 🛠️ Tecnologias
@@ -75,25 +75,27 @@ python -m client.main
 
 ```
 serpent-chat-encryption/
-├── server.py              # Servidor de chat
-├── client/                # Cliente modular
-│   ├── main.py           # Ponto de entrada do cliente
-│   ├── gui_manager.py    # Gerenciamento da GUI
-│   ├── networking.py     # Comunicação com servidor
-│   ├── message_handler.py # Processamento de mensagens
-│   ├── validation.py     # Validações de entrada
-│   └── ui/               # Componentes da interface
-│       ├── auth_screens.py   # Telas de login/registro
-│       ├── main_screen.py    # Tela principal do chat
-│       ├── dialogs.py        # Diálogos diversos
-│       └── qr_dialog.py      # Diálogo de QR Code
-├── database.py         # Gerenciamento do banco de dados
-├── auth.py             # Autenticação e 2FA
-├── crypto_utils.py     # Utilidades de criptografia
-├── logger_config.py    # Configuração de logging
-├── requirements.txt    # Dependências do projeto
-├── README.md           # Este arquivo
-└── MANUAL.md           # Manual do usuário
+├── src/
+│   ├── server/            # Servidor de chat
+│   │   ├── server.py
+│   │   ├── auth.py
+│   │   └── database.py
+│   ├── client/            # Cliente modular
+│   │   ├── main.py
+│   │   ├── gui_manager.py
+│   │   ├── networking.py
+│   │   ├── message_handler.py
+│   │   ├── validation.py
+│   │   └── ui/
+│   └── common/            # Utilitários compartilhados
+│       ├── crypto_utils.py
+│       └── logger_config.py
+├── docs/                  # Documentação
+│   └── MANUAL.md
+├── legacy/                # Arquivos depreciados
+├── tests/                 # Testes unitários
+├── requirements.txt       # Dependências do projeto
+└── README.md              # Este arquivo
 ```
 
 ## 🔒 Segurança

@@ -5,7 +5,7 @@ import hashlib
 from pyserpent import Serpent, serpent_cbc_encrypt, serpent_cbc_decrypt
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
-from logger_config import setup_logger
+from src.common.logger_config import setup_logger
 
 log = setup_logger(__name__)
 

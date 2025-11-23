@@ -1,11 +1,11 @@
 import asyncio
 import json
 import struct
-from database import Database
-from auth import AuthManager
-from crypto_utils import CryptoUtils
+from src.server.database import Database
+from src.server.auth import AuthManager
+from src.common.crypto_utils import CryptoUtils
 from pyserpent import Serpent
-from logger_config import setup_logger
+from src.common.logger_config import setup_logger
 
 log = setup_logger(__name__)
 

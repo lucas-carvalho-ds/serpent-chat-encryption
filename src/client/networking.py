@@ -8,7 +8,7 @@ import threading
 import queue
 import json
 import struct
-from logger_config import setup_logger
+from src.common.logger_config import setup_logger
 
 log = setup_logger(__name__)
 

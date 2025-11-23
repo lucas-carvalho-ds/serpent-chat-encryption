@@ -8,15 +8,15 @@ from tkinter import ttk, simpledialog, messagebox
 import queue
 from Crypto.PublicKey import RSA
 
-from client.networking import NetworkThread
-from client.validation import validate_login, validate_registration, validate_username
-from client.message_handler import MessageHandler
-from client.ui.auth_screens import AuthScreens
-from client.ui.main_screen import MainScreen
-from client.ui.dialogs import MemberSelectionDialog, RoomMembersDialog
-from client.ui.qr_dialog import show_qr_code
-from crypto_utils import CryptoUtils, SerpentCipher
-from logger_config import setup_logger
+from src.client.networking import NetworkThread
+from src.client.validation import validate_login, validate_registration, validate_username
+from src.client.message_handler import MessageHandler
+from src.client.ui.auth_screens import AuthScreens
+from src.client.ui.main_screen import MainScreen
+from src.client.ui.dialogs import MemberSelectionDialog, RoomMembersDialog
+from src.client.ui.qr_dialog import show_qr_code
+from src.common.crypto_utils import CryptoUtils, SerpentCipher
+from src.common.logger_config import setup_logger
 
 log = setup_logger(__name__)
 

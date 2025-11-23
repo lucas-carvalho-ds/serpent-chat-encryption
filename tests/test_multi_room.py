@@ -7,8 +7,8 @@ import json
 # Adicionar diretório pai ao path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from database import Database
-from crypto_utils import CryptoUtils, SerpentCipher
+from src.server.database import Database
+from src.common.crypto_utils import CryptoUtils, SerpentCipher
 
 class TestMultiRoom(unittest.TestCase):
     def setUp(self):
