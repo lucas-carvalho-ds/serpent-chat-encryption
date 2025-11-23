@@ -27,7 +27,7 @@ _O servidor escuta na porta 8888 por padrão e será indicado como "Servidor rod
 Para entrar no chat usando a interface gráfica:
 
 ```bash
-python client_gui.py
+python -m client.main
 ```
 
 ## 3. Usando a Interface Gráfica (GUI)
@@ -61,10 +61,17 @@ A janela principal é dividida em três áreas:
 #### Barra Lateral Esquerda
 
 - **Lista de Salas**: Mostra todas as suas conversas (individuais e em grupo)
+  - **Clique com botão direito** em uma sala para ver o menu de contexto com opções:
+    - **"Ver Participantes"**: Visualizar membros da sala e seus status
+    - **"Sair da Sala"**: Sair da conversa
 - **Usuários Online**: Lista de usuários conectados atualmente
+  - 🟢 Indica usuário **online**
+  - ⚫ Indica usuário **offline**
 - **Botões de Ação**:
   - **"Nova Sala Individual"**: Criar conversa individual com um usuário
   - **"Nova Sala em Grupo"**: Criar sala de chat em grupo
+  - **"Entrar em Sala em Grupo"**: Entrar em uma sala existente pelo ID
+- **Botão Sair (Logout)**: No topo da barra lateral, para fazer logout com segurança
 
 #### Área Central
 
@@ -83,19 +90,39 @@ A janela principal é dividida em três áreas:
 ### 3.5. Criando uma Nova Sala em Grupo
 
 1. Clique no botão **"Nova Sala em Grupo"**
-2. Digite o nome do grupo
-3. Selecione os membros da lista de usuários online (mantenha Ctrl pressionado para selecionar múltiplos)
+2. Digite o **nome do grupo**
+3. Selecione os membros usando as **caixas de seleção (checkboxes)**:
+   - Marque os usuários que deseja adicionar ao grupo
+   - Você pode selecionar múltiplos usuários
+   - **Você será automaticamente incluído** como membro (não precisa se selecionar)
 4. Clique em **"Criar"**
 5. O novo grupo aparecerá na lista de salas
 
-### 3.6. Enviando Mensagens
+### 3.6. Visualizando Membros de uma Sala
+
+1. **Clique com o botão direito** na sala desejada na lista de salas
+2. Selecione **"Ver Participantes"** no menu
+3. Uma janela será aberta mostrando:
+   - Lista de todos os membros da sala
+   - Status de cada membro:
+     - 🟢 **Online**: Usuário está conectado no momento
+     - ⚫ **Offline**: Usuário não está conectado
+
+### 3.7. Saindo de uma Sala
+
+1. **Clique com o botão direito** na sala que deseja sair
+2. Selecione **"Sair da Sala"** no menu de contexto
+3. A sala será removida da sua lista de salas
+4. Você não receberá mais mensagens dessa conversa
+
+### 3.8. Enviando Mensagens
 
 1. Selecione uma sala/conversa na lista de salas
 2. Digite sua mensagem no campo de entrada
 3. Pressione **Enter** ou clique em **"Enviar"**
 4. A mensagem será criptografada e enviada para todos os membros da sala
 
-### 3.7. Visualizando Histórico
+### 3.9. Visualizando Histórico
 
 Ao selecionar uma sala, o histórico de mensagens anteriores é carregado automaticamente e descriptografado localmente no seu cliente.
 

@@ -19,8 +19,11 @@ Um sistema de chat seguro desenvolvido com foco nos 4 pilares da Segurança da I
 - **Criptografia Ponta-a-Ponta**: Cada sala possui chave Serpent exclusiva, distribuída via RSA.
 - **QR Code para 2FA**: Registro simplificado com QR Code escaneável para configurar o TOTP.
 - **Histórico Persistente**: Mensagens salvas criptografadas no banco de dados.
-- **Lista de Usuários Online**: Visualização em tempo real de usuários conectados.
+- **Lista de Usuários Online**: Visualização em tempo real de usuários conectados com indicadores de status (🟢 online / ⚫ offline).
 - **Isolamento de Chaves por Sala**: Cada sala possui criptografia independente.
+- **Menu de Contexto**: Clique direito nas salas para ver participantes ou sair da sala.
+- **Seleção Intuitiva de Membros**: Sistema de checkboxes para criar grupos facilmente.
+- **Visualização de Membros**: Veja quem está em cada sala com status de online/offline.
 
 ## 📦 Instalação
 
@@ -55,7 +58,7 @@ _O servidor escuta na porta 8888 por padrão._
 ### Cliente
 
 ```bash
-python client_gui.py
+python -m client.main
 ```
 
 ## 🛠️ Tecnologias
@@ -72,8 +75,18 @@ python client_gui.py
 
 ```
 serpent-chat-encryption/
-├── server.py           # Servidor de chat
-├── client_gui.py       # Cliente com interface gráfica
+├── server.py              # Servidor de chat
+├── client/                # Cliente modular
+│   ├── main.py           # Ponto de entrada do cliente
+│   ├── gui_manager.py    # Gerenciamento da GUI
+│   ├── networking.py     # Comunicação com servidor
+│   ├── message_handler.py # Processamento de mensagens
+│   ├── validation.py     # Validações de entrada
+│   └── ui/               # Componentes da interface
+│       ├── auth_screens.py   # Telas de login/registro
+│       ├── main_screen.py    # Tela principal do chat
+│       ├── dialogs.py        # Diálogos diversos
+│       └── qr_dialog.py      # Diálogo de QR Code
 ├── database.py         # Gerenciamento do banco de dados
 ├── auth.py             # Autenticação e 2FA
 ├── crypto_utils.py     # Utilidades de criptografia
@@ -92,4 +105,3 @@ Este projeto foi desenvolvido com foco educacional em Segurança da Informação
 - HMAC-SHA256 para integridade
 - bcrypt para hash de senhas
 - TOTP para autenticação de dois fatores
-
