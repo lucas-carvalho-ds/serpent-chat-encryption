@@ -95,24 +95,27 @@ class MemberSelectionDialog:
                 var = tk.BooleanVar()
                 self.checkbox_vars[user] = var
                 
-                # Determine status icon
+                # Determine status icon and color
                 if user in online_users:
-                    status_icon = "🟢"
+                    status_icon = "●"
                     status_text = ""
+                    color = "#2e7d32" # Green
                 else:
-                    status_icon = "⚫"
+                    status_icon = "●"
                     status_text = " (offline)"
+                    color = "#d32f2f" # Red
                 
                 if self.mode == 'single':
-                     # Use Radiobutton logic with Checkbuttons (manual enforcement) or just Checkbuttons
-                     # For simplicity, let's use Checkbuttons but enforce single selection in 'ok' or via trace
-                     # Actually, let's just use Checkbuttons and validate count = 1
                      pass
 
-                cb = ttk.Checkbutton(
+                # Use tk.Checkbutton for direct color support
+                cb = tk.Checkbutton(
                     scrollable_frame,
                     text=f"{status_icon} {user}{status_text}",
                     variable=var,
+                    fg=color,
+                    bg='white', # Match canvas background usually
+                    activebackground='white',
                     command=lambda v=var: self.on_check(v) if self.mode == 'single' else None
                 )
                 cb.pack(anchor="w", padx=10, pady=2)
@@ -237,12 +240,18 @@ class RoomMembersDialog:
         
         # Populate list
         online_count = 0
-        for member in sorted(members):
+        for i, member in enumerate(sorted(members)):
+            icon = "●"
             if member in online_members:
-                listbox.insert(tk.END, f"🟢 {member}")
+                text = f"{icon} {member}"
+                color = "#2e7d32"
                 online_count += 1
             else:
-                listbox.insert(tk.END, f"⚫ {member} (offline)")
+                text = f"{icon} {member} (offline)"
+                color = "#d32f2f"
+            
+            listbox.insert(tk.END, text)
+            listbox.itemconfig(i, {'fg': color})
         
         # Status info
         info_frame = ttk.Frame(self.dialog, padding="10")

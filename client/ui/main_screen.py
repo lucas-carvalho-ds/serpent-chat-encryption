@@ -22,10 +22,11 @@ class MainScreen:
         
     def build_ui(self, on_room_select_callback, on_send_callback, 
                  on_create_private_callback, on_create_group_callback, on_join_group_callback,
-                 on_leave_room_callback, on_view_members_callback):
+                 on_leave_room_callback, on_view_members_callback, on_logout_callback):
         """Builds the main chat UI"""
         self.on_leave_room = on_leave_room_callback
         self.on_view_members = on_view_members_callback
+        self.on_logout = on_logout_callback
         # Clear window
         for widget in self.root.winfo_children():
             widget.destroy()
@@ -46,6 +47,10 @@ class MainScreen:
         user_header.pack(fill="x", pady=(0, 10))
         ttk.Label(user_header, text="Logado como:", font=('Helvetica', 9)).pack(anchor="w")
         ttk.Label(user_header, text=f"👤 {self.username}", font=('Helvetica', 11, 'bold'), foreground='#2e7d32').pack(anchor="w")
+        
+        # Logout Button
+        ttk.Button(user_header, text="Sair (Logout)", command=self.on_logout, width=15).pack(anchor="e", pady=2)
+        
         ttk.Separator(user_header, orient='horizontal').pack(fill='x', pady=5)
         
         # Rooms List
@@ -85,7 +90,6 @@ class MainScreen:
         ttk.Button(btn_frame, text="Nova Sala Individual", command=on_create_private_callback).pack(fill="x", pady=2)
         ttk.Button(btn_frame, text="Nova Sala em Grupo", command=on_create_group_callback).pack(fill="x", pady=2)
         ttk.Button(btn_frame, text="Entrar em Sala em Grupo", command=on_join_group_callback).pack(fill="x", pady=2)
-        
         # Users List
         ttk.Label(sidebar, text="Usuários Online", style="Bold.TLabel").pack(anchor="w", pady=(10,0))
         self.users_listbox = tk.Listbox(sidebar, height=10)

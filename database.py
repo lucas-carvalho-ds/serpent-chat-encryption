@@ -49,6 +49,19 @@ class Database:
                 FOREIGN KEY(user_id) REFERENCES users(id)
             )
         ''')
+        
+        # Migration: Ensure joined_at exists (for existing databases)
+        try:
+            cursor.execute('SELECT joined_at FROM room_members LIMIT 1')
+        except sqlite3.OperationalError:
+            log.info("Migrando tabela room_members: adicionando coluna joined_at")
+            cursor.execute('ALTER TABLE room_members ADD COLUMN joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP')
+            # Fix: Update existing members to have access to full history
+            cursor.execute("UPDATE room_members SET joined_at = '1970-01-01 00:00:00'")
+            
+        # Ensure we fix history for users who already migrated with the "bad" timestamp (current time)
+        # This is a safe-guard for this development session
+        cursor.execute("UPDATE room_members SET joined_at = '1970-01-01 00:00:00' WHERE joined_at > datetime('now', '-1 minute')")
 
         # Tabela de Mensagens
         # Nota: room_id agora referencia rooms(id)

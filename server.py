@@ -128,6 +128,15 @@ class ChatServer:
             room_id = message.get('room_id')
             return self.get_room_members(current_user, room_id)
 
+        elif action == 'logout':
+            # Remove user from connected clients
+            if current_user in self.connected_clients:
+                del self.connected_clients[current_user]
+            if current_user in self.client_keys:
+                del self.client_keys[current_user]
+            await self.broadcast_user_list()
+            return {'status': 'success', 'message': 'Logout realizado.'}
+
         return {'status': 'error', 'message': 'Ação desconhecida.'}
 
     def handle_register(self, message):
@@ -183,6 +192,9 @@ class ChatServer:
         # Notificar ambos e enviar chaves
         await self.notify_new_room(room_id, room_name, 'private', [creator, target_user], room_key)
         
+        # System Message
+        await self.broadcast_system_message(room_id, f"{creator} criou este chat com {target_user}.")
+        
         return {'status': 'success', 'message': 'Chat individual criado.', 'room_id': room_id}
 
     async def create_group_chat(self, creator, group_name, members):
@@ -204,6 +216,10 @@ class ChatServer:
         
         await self.notify_new_room(room_id, group_name, 'group', valid_members, room_key)
         
+        # System Message
+        members_str = ", ".join(members)
+        await self.broadcast_system_message(room_id, f"{creator} criou o grupo '{group_name}' com: {members_str}.")
+        
         return {'status': 'success', 'message': f'Grupo {group_name} criado.', 'room_id': room_id}
 
     async def leave_room(self, username, room_id):
@@ -214,6 +230,7 @@ class ChatServer:
         self.db.remove_room_member(room_id, user_id)
         
         # Notificar sucesso para o cliente remover da UI
+        await self.broadcast_system_message(room_id, f"{username} saiu da sala.")
         return {'status': 'success', 'message': 'Você saiu da sala.', 'action': 'left_room', 'room_id': room_id}
 
     async def join_room(self, username, room_id):
@@ -260,7 +277,27 @@ class ChatServer:
                         'key': encrypted_key.hex()
                     })
         
+        
+        await self.broadcast_system_message(room_id, f"{username} entrou na sala.")
         return {'status': 'success', 'message': 'Entrou na sala com sucesso.'}
+
+    async def broadcast_system_message(self, room_id, content):
+        """Broadcast a system message to room members"""
+        import datetime
+        msg = {
+            'action': 'system_message',
+            'room_id': room_id,
+            'content': content,
+            'timestamp': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+        
+        members_ids = self.db.get_room_members(room_id)
+        for user_id in members_ids:
+            user_data = self.db.get_user_by_id(user_id)
+            if user_data:
+                username = user_data[1]
+                if username in self.connected_clients:
+                    await self.send_json(self.connected_clients[username], msg)
 
     def get_room_members(self, username, room_id):
         # Verificar permissão

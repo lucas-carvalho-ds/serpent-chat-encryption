@@ -99,7 +99,8 @@ class ChatGUI:
             on_create_group_callback=self.create_group_chat,
             on_join_group_callback=self.join_room_dialog,
             on_leave_room_callback=self.leave_room,
-            on_view_members_callback=self.show_room_members
+            on_view_members_callback=self.show_room_members,
+            on_logout_callback=self.logout
         )
         self.update_rooms_list()
     
@@ -195,6 +196,28 @@ class ChatGUI:
         r_id = simpledialog.askinteger("Entrar em Sala em Grupo", "ID da Sala:")
         if r_id:
             self.outgoing_queue.put({'action': 'join_room', 'room_id': r_id})
+
+    def logout(self):
+        """Handle logout"""
+        if messagebox.askyesno("Sair", "Deseja realmente sair?"):
+            # Send logout message to server
+            try:
+                self.outgoing_queue.put({'action': 'logout'})
+            except:
+                pass
+
+            # Clear state
+            self.username = None
+            self.private_key, self.public_key = CryptoUtils.generate_rsa_keypair()
+            self.rooms = {}
+            self.room_keys = {}
+            self.room_ciphers = {}
+            self.active_room_id = None
+            self.room_members = {}
+            self.room_online_members = {}
+            
+            # Return to login screen
+            self.build_login_ui()
 
     def leave_room(self, room_id):
         """Leave a room"""
@@ -384,13 +407,20 @@ class ChatGUI:
         
         if self.main_screen and hasattr(self.main_screen, 'users_listbox'):
             self.main_screen.users_listbox.delete(0, tk.END)
-            for username in sorted(self.all_users_status.keys()):
+            for i, username in enumerate(sorted(self.all_users_status.keys())):
                 status = self.all_users_status[username]
-                icon = "🟢" if status == 'online' else "⚫"
+                # Use standard bullet point
+                icon = "●"
                 text = f"{icon} {username}"
+                
                 if status == 'offline':
                     text += " (offline)"
+                    color = "#d32f2f" # Red
+                else:
+                    color = "#2e7d32" # Green
+                
                 self.main_screen.users_listbox.insert(tk.END, text)
+                self.main_screen.users_listbox.itemconfig(i, {'fg': color})
     
     def handle_new_message(self, room_id, formatted_msg):
         """Handle new message"""

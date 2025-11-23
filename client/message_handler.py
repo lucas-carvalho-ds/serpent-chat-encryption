@@ -155,3 +155,23 @@ class MessageHandler:
             members = message.get('members')
             if 'on_room_members' in context:
                 context['on_room_members'](r_id, members)
+
+        # Handle system message
+        elif action == 'system_message':
+            r_id = message.get('room_id')
+            content = message.get('content')
+            timestamp = message.get('timestamp', '')
+            
+            # Format timestamp
+            try:
+                if ' ' in timestamp:
+                    time_part = timestamp.split(' ')[1][:5]
+                    formatted_msg = f"[{time_part}] [Sistema]: {content}"
+                else:
+                    formatted_msg = f"[Sistema]: {content}"
+            except:
+                formatted_msg = f"[Sistema]: {content}"
+            
+            if r_id in context['rooms']:
+                context['rooms'][r_id]['history'].append(formatted_msg)
+                context['on_new_message'](r_id, formatted_msg)
