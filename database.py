@@ -108,6 +108,15 @@ class Database:
         conn.close()
         return user
 
+    def get_all_users(self):
+        """Retorna lista de todos os usernames cadastrados."""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT username FROM users')
+        users = [row[0] for row in cursor.fetchall()]
+        conn.close()
+        return users
+
     def update_user_public_key(self, username, public_key_pem):
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -137,6 +146,14 @@ class Database:
             return False
         finally:
             conn.close()
+
+    def remove_room_member(self, room_id, user_id):
+        """Remove um usuário de uma sala."""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM room_members WHERE room_id = ? AND user_id = ?', (room_id, user_id))
+        conn.commit()
+        conn.close()
 
     def get_user_rooms(self, user_id):
         """Retorna as salas que o usuário participa."""

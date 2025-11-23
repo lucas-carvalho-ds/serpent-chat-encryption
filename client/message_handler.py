@@ -121,4 +121,18 @@ class MessageHandler:
                     except:
                         pass
                 context['rooms'][r_id]['history'] = history_text
+                context['rooms'][r_id]['history'] = history_text
                 context['on_room_history'](r_id, history_text)
+
+        # Handle left room
+        elif action == 'left_room':
+            r_id = message.get('room_id')
+            if 'on_left_room' in context:
+                context['on_left_room'](r_id)
+
+        # Handle room members
+        elif action == 'room_members':
+            r_id = message.get('room_id')
+            members = message.get('members')
+            if 'on_room_members' in context:
+                context['on_room_members'](r_id, members)

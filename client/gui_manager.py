@@ -97,7 +97,9 @@ class ChatGUI:
             on_send_callback=self.send_message,
             on_create_private_callback=self.create_private_chat,
             on_create_group_callback=self.create_group_chat,
-            on_join_group_callback=self.join_room_dialog
+            on_join_group_callback=self.join_room_dialog,
+            on_leave_room_callback=self.leave_room,
+            on_view_members_callback=self.show_room_members
         )
         self.update_rooms_list()
     
@@ -135,31 +137,47 @@ class ChatGUI:
         })
     
     def create_private_chat(self):
-        """Create private chat dialog"""
-        target = simpledialog.askstring("Nova Sala Individual", "Nome do usuário:")
-        if not target:
-            return
+        """Create private chat dialog with user selection"""
+        # Get all users (online and offline)
+        # The server now sends all users in user_list, so self.online_users contains all users?
+        # No, self.online_users was a set of strings. Now update_user_list receives dicts.
+        # We need to store all users and their status.
         
-        target = target.strip()
-        if not target:
-            messagebox.showerror("Erro", "O nome do usuário não pode estar vazio.")
-            return
+        # Let's check update_user_list implementation below first.
+        # Assuming self.all_users_status is available (we will add it)
         
-        if target.lower() == self.username.lower():
-            messagebox.showerror("Erro", "Você não pode criar um chat com você mesmo.")
-            return
+        if not hasattr(self, 'all_users_status'):
+             self.all_users_status = {}
+             
+        all_usernames = list(self.all_users_status.keys())
+        online_usernames = {u for u, s in self.all_users_status.items() if s == 'online'}
         
-        valid, msg = validate_username(target)
-        if not valid:
-            messagebox.showerror("Erro de Validação", msg)
+        if not all_usernames or (len(all_usernames) == 1 and self.username in all_usernames):
+            messagebox.showinfo("Info", "Não há outros usuários disponíveis.")
             return
+
+        # Show member selection dialog in single mode
+        dialog = MemberSelectionDialog(self.root, all_usernames, self.username, online_usernames, mode='single')
+        target = dialog.show()
         
-        self.outgoing_queue.put({'action': 'create_private_chat', 'target_username': target})
+        if target:
+            self.outgoing_queue.put({'action': 'create_private_chat', 'target_username': target})
     
     def create_group_chat(self):
         """Create group chat with checkbox-based member selection"""
-        # Get all users from the online users set
-        all_users = list(self.online_users)
+        # Get all users
+        if not hasattr(self, 'all_users_status'):
+             self.all_users_status = {}
+             
+        all_usernames = list(self.all_users_status.keys())
+        online_usernames = {u for u, s in self.all_users_status.items() if s == 'online'}
+        
+        if not all_usernames or (len(all_usernames) == 1 and self.username in all_usernames):
+            messagebox.showinfo("Info", "Não há outros usuários disponíveis para criar um grupo.")
+            return
+        
+        # Show member selection dialog
+        dialog = MemberSelectionDialog(self.root, all_usernames, self.username, online_usernames, mode='multiple')
         
         if not all_users or (len(all_users) == 1 and self.username in all_users):
             messagebox.showinfo("Info", "Não há outros usuários disponíveis para criar um grupo.")
@@ -178,10 +196,22 @@ class ChatGUI:
             })
     
     def join_room_dialog(self):
-        """Join room dialog (placeholder)"""
+        """Join room dialog"""
         r_id = simpledialog.askinteger("Entrar em Sala em Grupo", "ID da Sala:")
         if r_id:
-            pass  # Server auto-joins if invited
+            self.outgoing_queue.put({'action': 'join_room', 'room_id': r_id})
+
+    def leave_room(self, room_id):
+        """Leave a room"""
+        if messagebox.askyesno("Sair da Sala", "Tem certeza que deseja sair desta sala?"):
+            self.outgoing_queue.put({'action': 'leave_room', 'room_id': room_id})
+
+    def show_room_members(self, room_id):
+        """Show members of a room"""
+        if room_id not in self.rooms:
+            return
+            
+        self.outgoing_queue.put({'action': 'get_room_members', 'room_id': room_id})
     
     def on_room_select(self, event):
         """Handle room selection"""
@@ -270,9 +300,50 @@ class ChatGUI:
             'on_room_added': lambda r_id, name, r_type: self.update_rooms_list(),
             'on_user_list_updated': self.update_user_list,
             'on_new_message': self.handle_new_message,
-            'on_room_history': self.handle_room_history
+            'on_new_message': self.handle_new_message,
+            'on_room_history': self.handle_room_history,
+            'on_left_room': self.handle_left_room,
+            'on_room_members': self.handle_room_members
         }
         MessageHandler.process_message(message, context)
+
+    def handle_left_room(self, room_id):
+        """Handle confirmation of leaving a room"""
+        if room_id in self.rooms:
+            del self.rooms[room_id]
+            if room_id in self.room_keys:
+                del self.room_keys[room_id]
+            if room_id in self.room_ciphers:
+                del self.room_ciphers[room_id]
+            
+            if self.active_room_id == room_id:
+                self.active_room_id = None
+                if self.main_screen:
+                    self.main_screen.chat_header.config(text="Selecione uma sala")
+                    self.main_screen.chat_history.config(state='normal')
+                    self.main_screen.chat_history.delete(1.0, tk.END)
+                    self.main_screen.chat_history.config(state='disabled')
+            
+            self.update_rooms_list()
+            messagebox.showinfo("Sucesso", "Você saiu da sala.")
+
+    def handle_room_members(self, room_id, members):
+        """Handle receiving room members list"""
+        if room_id not in self.rooms:
+            return
+            
+        room_name = self.rooms[room_id]['name']
+        member_usernames = members
+        online_members = set()
+        
+        # Calculate online members based on global status
+        if hasattr(self, 'all_users_status'):
+            for m in member_usernames:
+                if self.all_users_status.get(m) == 'online':
+                    online_members.add(m)
+        
+        dialog = RoomMembersDialog(self.root, room_name, member_usernames, online_members)
+        dialog.show()
     
     def show_qr_with_username(self, secret):
         """Show QR code after registration"""
@@ -296,16 +367,35 @@ class ChatGUI:
             for r_id, r_data in self.rooms.items():
                 self.main_screen.rooms_listbox.insert(tk.END, f"{r_id}: {r_data['name']} ({r_data['type']})")
     
-    def update_user_list(self, users):
+    def update_user_list(self, users_data):
         """Update users list in UI with online status indicators"""
-        # Track online users
-        self.online_users = set(users)
+        # users_data is now a list of dicts: [{'username': 'u', 'status': 'online'}, ...]
+        
+        self.all_users_status = {} # {username: status}
+        self.online_users = set()
+        
+        for u_data in users_data:
+            if isinstance(u_data, dict):
+                username = u_data['username']
+                status = u_data['status']
+            else:
+                # Fallback for old format if any
+                username = u_data
+                status = 'online'
+                
+            self.all_users_status[username] = status
+            if status == 'online':
+                self.online_users.add(username)
         
         if self.main_screen and hasattr(self.main_screen, 'users_listbox'):
             self.main_screen.users_listbox.delete(0, tk.END)
-            for u in sorted(users):
-                # All users in this list are online (server sends only online users)
-                self.main_screen.users_listbox.insert(tk.END, f"🟢 {u}")
+            for username in sorted(self.all_users_status.keys()):
+                status = self.all_users_status[username]
+                icon = "🟢" if status == 'online' else "⚫"
+                text = f"{icon} {username}"
+                if status == 'offline':
+                    text += " (offline)"
+                self.main_screen.users_listbox.insert(tk.END, text)
     
     def handle_new_message(self, room_id, formatted_msg):
         """Handle new message"""

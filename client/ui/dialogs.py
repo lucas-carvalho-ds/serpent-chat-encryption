@@ -10,20 +10,23 @@ from tkinter import ttk, messagebox
 class MemberSelectionDialog:
     """Dialog for selecting group members with checkboxes"""
     
-    def __init__(self, parent, all_users, current_username, online_users):
+    def __init__(self, parent, all_users, current_username, online_users, mode='multiple'):
         """
         Args:
             parent: Parent window
             all_users: List of all available usernames
             current_username: Username of current user (excluded from list)
             online_users: Set of currently online usernames
+            mode: 'multiple' for group creation, 'single' for private chat
         """
         self.result = None
         self.selected_members = []
+        self.mode = mode
         
         # Create dialog
+        title = "Criar Grupo" if mode == 'multiple' else "Nova Conversa"
         self.dialog = tk.Toplevel(parent)
-        self.dialog.title("Criar Grupo")
+        self.dialog.title(title)
         self.dialog.geometry("400x500")
         self.dialog.attributes('-topmost', True)  # Always on top
         self.dialog.transient(parent)  # Associated with parent
@@ -35,24 +38,31 @@ class MemberSelectionDialog:
         y = (self.dialog.winfo_screenheight() // 2) - (500 // 2)
         self.dialog.geometry(f"400x500+{x}+{y}")
         
-        # Group name
-        name_frame = ttk.Frame(self.dialog, padding="10")
-        name_frame.pack(fill="x")
-        
-        ttk.Label(name_frame, text="Nome do Grupo:").pack(anchor="w")
-        self.name_entry = ttk.Entry(name_frame, font=('Helvetica', 11))
-        self.name_entry.pack(fill="x", pady=5)
-        self.name_entry.focus()
-        
-        ttk.Separator(self.dialog, orient='horizontal').pack(fill='x', pady=5)
+        # Group name (only for multiple mode)
+        if self.mode == 'multiple':
+            name_frame = ttk.Frame(self.dialog, padding="10")
+            name_frame.pack(fill="x")
+            
+            ttk.Label(name_frame, text="Nome do Grupo:").pack(anchor="w")
+            self.name_entry = ttk.Entry(name_frame, font=('Helvetica', 11))
+            self.name_entry.pack(fill="x", pady=5)
+            self.name_entry.focus()
+            
+            ttk.Separator(self.dialog, orient='horizontal').pack(fill='x', pady=5)
+        else:
+            self.name_entry = None
         
         # Members selection
         members_label_frame = ttk.Frame(self.dialog, padding="10")
         members_label_frame.pack(fill="x")
-        ttk.Label(members_label_frame, text="Selecione os membros:", 
+        
+        lbl_text = "Selecione os membros:" if self.mode == 'multiple' else "Selecione o usuário:"
+        ttk.Label(members_label_frame, text=lbl_text, 
                  font=('Helvetica', 10, 'bold')).pack(anchor="w")
-        ttk.Label(members_label_frame, text="(Você será adicionado automaticamente)", 
-                 font=('Helvetica', 9, 'italic'), foreground='gray').pack(anchor="w")
+                 
+        if self.mode == 'multiple':
+            ttk.Label(members_label_frame, text="(Você será adicionado automaticamente)", 
+                     font=('Helvetica', 9, 'italic'), foreground='gray').pack(anchor="w")
         
         # Scrollable frame for checkboxes
         canvas_frame = ttk.Frame(self.dialog)
@@ -93,17 +103,26 @@ class MemberSelectionDialog:
                     status_icon = "⚫"
                     status_text = " (offline)"
                 
+                if self.mode == 'single':
+                     # Use Radiobutton logic with Checkbuttons (manual enforcement) or just Checkbuttons
+                     # For simplicity, let's use Checkbuttons but enforce single selection in 'ok' or via trace
+                     # Actually, let's just use Checkbuttons and validate count = 1
+                     pass
+
                 cb = ttk.Checkbutton(
                     scrollable_frame,
                     text=f"{status_icon} {user}{status_text}",
-                    variable=var
+                    variable=var,
+                    command=lambda v=var: self.on_check(v) if self.mode == 'single' else None
                 )
                 cb.pack(anchor="w", padx=10, pady=2)
         
         # Info label
         info_frame = ttk.Frame(self.dialog, padding="10")
         info_frame.pack(fill="x")
-        ttk.Label(info_frame, text="💡 Mínimo: você + 1 pessoa", 
+        
+        info_text = "💡 Mínimo: você + 1 pessoa" if self.mode == 'multiple' else "Selecione 1 usuário"
+        ttk.Label(info_frame, text=info_text, 
                  font=('Helvetica', 9), foreground='#666').pack(anchor="w")
         
         # Buttons
@@ -111,37 +130,55 @@ class MemberSelectionDialog:
         btn_frame.pack(fill="x")
         
         ttk.Button(btn_frame, text="Cancelar", command=self.cancel, width=15).pack(side="right", padx=5)
-        ttk.Button(btn_frame, text="Criar Grupo", command=self.ok, width=15).pack(side="right")
+        btn_text = "Criar Grupo" if self.mode == 'multiple' else "Criar Conversa"
+        ttk.Button(btn_frame, text=btn_text, command=self.ok, width=15).pack(side="right")
         
         # Bind Enter key
-        self.name_entry.bind("<Return>", lambda e: self.ok())
+        if self.name_entry:
+            self.name_entry.bind("<Return>", lambda e: self.ok())
+
+    def on_check(self, current_var):
+        """Ensure only one checkbox is selected in single mode"""
+        if current_var.get():
+            for var in self.checkbox_vars.values():
+                if var != current_var:
+                    var.set(False)
         
     def ok(self):
         """Validate and accept selection"""
-        group_name = self.name_entry.get().strip()
+        group_name = ""
         
-        # Validate group name
-        if not group_name:
-            messagebox.showerror("Erro", "O nome do grupo não pode estar vazio.", parent=self.dialog)
-            return
-        
-        if len(group_name) < 3:
-            messagebox.showerror("Erro", "O nome do grupo deve ter pelo menos 3 caracteres.", parent=self.dialog)
-            return
-        
-        if len(group_name) > 50:
-            messagebox.showerror("Erro", "O nome do grupo não pode ter mais de 50 caracteres.", parent=self.dialog)
-            return
+        if self.mode == 'multiple':
+            group_name = self.name_entry.get().strip()
+            
+            # Validate group name
+            if not group_name:
+                messagebox.showerror("Erro", "O nome do grupo não pode estar vazio.", parent=self.dialog)
+                return
+            
+            if len(group_name) < 3:
+                messagebox.showerror("Erro", "O nome do grupo deve ter pelo menos 3 caracteres.", parent=self.dialog)
+                return
+            
+            if len(group_name) > 50:
+                messagebox.showerror("Erro", "O nome do grupo não pode ter mais de 50 caracteres.", parent=self.dialog)
+                return
         
         # Get selected members
         self.selected_members = [user for user, var in self.checkbox_vars.items() if var.get()]
         
-        # Validate at least one member selected
-        if len(self.selected_members) < 1:
-            messagebox.showerror("Erro", "Selecione pelo menos 1 pessoa para o grupo.\n(Você + 1 pessoa = mínimo 2 participantes)", parent=self.dialog)
-            return
-        
-        self.result = (group_name, self.selected_members)
+        # Validate selection
+        if self.mode == 'multiple':
+            if len(self.selected_members) < 1:
+                messagebox.showerror("Erro", "Selecione pelo menos 1 pessoa para o grupo.", parent=self.dialog)
+                return
+            self.result = (group_name, self.selected_members)
+        else:
+            if len(self.selected_members) != 1:
+                messagebox.showerror("Erro", "Selecione exatamente 1 usuário.", parent=self.dialog)
+                return
+            self.result = self.selected_members[0] # Return just the username string
+            
         self.dialog.destroy()
     
     def cancel(self):
