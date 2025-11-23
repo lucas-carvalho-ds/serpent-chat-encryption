@@ -336,7 +336,6 @@ class ChatGUI:
             'on_room_added': self.handle_room_added,
             'on_user_list_updated': self.update_user_list,
             'on_new_message': self.handle_new_message,
-            'on_new_message': self.handle_new_message,
             'on_room_history': self.handle_room_history,
             'on_left_room': self.handle_left_room,
             'on_room_members': self.handle_room_members,
@@ -344,13 +343,28 @@ class ChatGUI:
         }
         MessageHandler.process_message(message, context)
 
-    def handle_room_added(self, r_id, name, r_type, is_new=False):
+    def handle_room_added(self, r_id, name, r_type, is_new=False, notification_text=None):
         """Handle new room added"""
         self.update_rooms_list()
         
         # Only show notification if the server explicitly flags it as new for this user
         if is_new and self.main_screen:
-             messagebox.showinfo("Novo Chat", f"Você foi adicionado ao chat: {name}")
+             text = notification_text if notification_text else f"Você foi adicionado ao chat: {name}"
+             messagebox.showinfo("Novo Chat", text)
+
+    def handle_room_history(self, r_id, history):
+        """Handle received room history"""
+        if r_id in self.rooms:
+            self.rooms[r_id]['history'] = history
+            
+            # If this is the active room, refresh the display
+            if self.active_room_id == r_id and self.main_screen:
+                self.main_screen.chat_history.config(state='normal')
+                self.main_screen.chat_history.delete(1.0, tk.END)
+                for msg in history:
+                    self.main_screen.chat_history.insert(tk.END, msg + "\n")
+                self.main_screen.chat_history.see(tk.END)
+                self.main_screen.chat_history.config(state='disabled')
 
     def handle_left_room(self, room_id):
         """Handle confirmation of leaving a room"""
@@ -453,11 +467,6 @@ class ChatGUI:
         """Handle new message"""
         if self.active_room_id == room_id and self.main_screen:
             self.append_chat(formatted_msg)
-    
-    def handle_room_history(self, room_id, history):
-        """Handle room history"""
-        if self.active_room_id == room_id:
-            self.refresh_chat_history()
     
     def append_chat(self, text):
         """Append message to chat"""

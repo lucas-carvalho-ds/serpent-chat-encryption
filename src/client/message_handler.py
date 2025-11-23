@@ -68,7 +68,8 @@ class MessageHandler:
                 if r_id not in context['rooms']:
                     context['rooms'][r_id] = {'name': r_name, 'type': r_type, 'history': []}
                     is_new = message.get('is_new', False)
-                    context['on_room_added'](r_id, r_name, r_type, is_new)
+                    notification_text = message.get('notification_text')
+                    context['on_room_added'](r_id, r_name, r_type, is_new, notification_text)
             except Exception as e:
                 log.error(f"Erro ao descriptografar chave da sala {r_name}: {e}")
         

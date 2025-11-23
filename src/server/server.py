@@ -270,24 +270,30 @@ class ChatServer:
         target_room = next((r for r in rooms if r[0] == room_id), None)
         
         if target_room:
-            r_id, r_name, r_type = target_room
+            r_id, r_name, r_type, seen = target_room
             pub_key = self.client_keys.get(username)
             if pub_key:
                 encrypted_key = CryptoUtils.encrypt_rsa(pub_key, room_key)
                 # Enviar dados da sala para o usuário
                 # Retornamos success, mas também mandamos o evento room_added via socket para garantir consistência
                 writer = self.connected_clients.get(username)
+                
+                # Mark as seen since user just joined
+                self.db.mark_room_seen(r_id, user_id)
+                
                 if writer:
                     await self.send_json(writer, {
                         'action': 'room_added',
                         'room_id': r_id,
                         'name': r_name,
                         'type': r_type,
-                        'key': encrypted_key.hex()
+                        'key': encrypted_key.hex(),
+                        'is_new': True,
+                        'notification_text': f"Você entrou no grupo: {r_name}"
                     })
         
         
-        await self.broadcast_system_message(room_id, f"{username} entrou na sala.")
+        await self.broadcast_system_message(room_id, f"{username} entrou no grupo.")
         return {'status': 'success', 'message': 'Entrou na sala com sucesso.'}
 
     async def broadcast_system_message(self, room_id, content):
@@ -410,7 +416,7 @@ class ChatServer:
                  'signature': m[5].hex(),
                  'timestamp': m[6]
              })
-        return {'status': 'history', 'room_id': room_id, 'data': history}
+        return {'status': 'history', 'action': 'room_history', 'room_id': room_id, 'data': history}
 
     async def send_user_rooms(self, writer, username):
         user_data = self.db.get_user_by_username(username)
