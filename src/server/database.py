@@ -44,24 +44,14 @@ class Database:
                 room_id INTEGER NOT NULL,
                 user_id INTEGER NOT NULL,
                 joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                seen INTEGER DEFAULT 0, -- 0: New/Unseen, 1: Seen
                 PRIMARY KEY (room_id, user_id),
                 FOREIGN KEY(room_id) REFERENCES rooms(id),
                 FOREIGN KEY(user_id) REFERENCES users(id)
             )
         ''')
-        
-        # Migration: Ensure joined_at exists (for existing databases)
-        try:
-            cursor.execute('SELECT joined_at FROM room_members LIMIT 1')
-        except sqlite3.OperationalError:
-            log.info("Migrando tabela room_members: adicionando coluna joined_at")
-            cursor.execute('ALTER TABLE room_members ADD COLUMN joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP')
-            # Fix: Update existing members to have access to full history
-            cursor.execute("UPDATE room_members SET joined_at = '1970-01-01 00:00:00'")
-            
-        # Ensure we fix history for users who already migrated with the "bad" timestamp (current time)
-        # This is a safe-guard for this development session
-        cursor.execute("UPDATE room_members SET joined_at = '1970-01-01 00:00:00' WHERE joined_at > datetime('now', '-1 minute')")
+
+
 
         # Tabela de Mensagens
         # Nota: room_id agora referencia rooms(id)
@@ -69,7 +59,6 @@ class Database:
             CREATE TABLE IF NOT EXISTS messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 sender_id INTEGER NOT NULL,
-                recipient_id INTEGER, -- Mantido para compatibilidade, mas uso principal será via room_id
                 room_id INTEGER NOT NULL, 
                 content_encrypted BLOB NOT NULL,
                 iv BLOB NOT NULL,
@@ -152,7 +141,7 @@ class Database:
         conn = self.get_connection()
         cursor = conn.cursor()
         try:
-            cursor.execute('INSERT INTO room_members (room_id, user_id) VALUES (?, ?)', (room_id, user_id))
+            cursor.execute('INSERT INTO room_members (room_id, user_id, seen) VALUES (?, ?, 0)', (room_id, user_id))
             conn.commit()
             return True
         except sqlite3.IntegrityError:
@@ -173,7 +162,7 @@ class Database:
         conn = self.get_connection()
         cursor = conn.cursor()
         cursor.execute('''
-            SELECT r.id, r.name, r.type
+            SELECT r.id, r.name, r.type, rm.seen
             FROM rooms r
             JOIN room_members rm ON r.id = rm.room_id
             WHERE rm.user_id = ?
@@ -220,6 +209,14 @@ class Database:
         groups = cursor.fetchall()
         conn.close()
         return groups
+
+    def mark_room_seen(self, room_id, user_id):
+        """Marca a sala como vista pelo usuário."""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute('UPDATE room_members SET seen = 1 WHERE room_id = ? AND user_id = ?', (room_id, user_id))
+        conn.commit()
+        conn.close()
 
     def get_private_chat_id(self, user1_id, user2_id):
         """Verifica se já existe um chat individual entre dois usuários."""

@@ -329,6 +329,7 @@ class JoinGroupDialog:
     def join(self):
         selection = self.listbox.curselection()
         if not selection:
+            messagebox.showwarning("Aviso", "Por favor, selecione um grupo para entrar.", parent=self.dialog)
             return
             
         index = selection[0]

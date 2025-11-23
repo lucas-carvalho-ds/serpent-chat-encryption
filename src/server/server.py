@@ -239,8 +239,8 @@ class ChatServer:
         self.db.remove_room_member(room_id, user_id)
         
         # Notificar sucesso para o cliente remover da UI
-        await self.broadcast_system_message(room_id, f"{username} saiu da sala.")
-        return {'status': 'success', 'message': 'Você saiu da sala.', 'action': 'left_room', 'room_id': room_id}
+        await self.broadcast_system_message(room_id, f"{username} saiu do chat.")
+        return {'status': 'success', 'message': 'Você saiu do chat.', 'action': 'left_room', 'room_id': room_id}
 
     async def join_room(self, username, room_id):
         user_data = self.db.get_user_by_username(username)
@@ -332,12 +332,17 @@ class ChatServer:
                 pub_key = self.client_keys.get(username)
                 if pub_key:
                     encrypted_key = CryptoUtils.encrypt_rsa(pub_key, room_key)
+                    
+                    # Mark as seen immediately if user is online and notified
+                    self.db.mark_room_seen(room_id, self.db.get_user_by_username(username)[0])
+                    
                     await self.send_json(writer, {
                         'action': 'room_added',
                         'room_id': room_id,
                         'name': name,
                         'type': r_type,
-                        'key': encrypted_key.hex()
+                        'key': encrypted_key.hex(),
+                        'is_new': True
                     })
 
     async def handle_send_message(self, sender, message):
@@ -415,17 +420,24 @@ class ChatServer:
         pub_key = self.client_keys.get(username)
         
         for r in rooms:
-            # r: id, name, type
-            r_id, r_name, r_type = r
+            # r: id, name, type, seen
+            r_id, r_name, r_type, seen = r
             key = self.db.get_room_key(r_id)
             if pub_key and key:
                 encrypted_key = CryptoUtils.encrypt_rsa(pub_key, key)
+                
+                is_new = False
+                if not seen:
+                    is_new = True
+                    self.db.mark_room_seen(r_id, user_id)
+                
                 await self.send_json(writer, {
                     'action': 'room_added',
                     'room_id': r_id,
                     'name': r_name,
                     'type': r_type,
-                    'key': encrypted_key.hex()
+                    'key': encrypted_key.hex(),
+                    'is_new': is_new
                 })
 
     async def broadcast_user_list(self):

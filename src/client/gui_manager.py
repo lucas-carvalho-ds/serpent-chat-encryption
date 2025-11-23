@@ -344,23 +344,12 @@ class ChatGUI:
         }
         MessageHandler.process_message(message, context)
 
-    def handle_room_added(self, r_id, name, r_type):
+    def handle_room_added(self, r_id, name, r_type, is_new=False):
         """Handle new room added"""
         self.update_rooms_list()
-        # If it's a new room (not just loading from history/login), notify user
-        # We can infer it's new if we are already logged in and receiving this.
-        # However, this is also called on login.
-        # Ideally, the server should send a specific "you were added" message or we check if we just created it.
-        # For now, let's just show notification if it's not the initial load (which we can't easily distinguish here without more state).
-        # A simple heuristic: if we have many rooms, it's likely a new addition.
-        # Better approach: The server sends 'room_added' when we create it too.
-        # Let's rely on a specific system message for "You were added" or just show it here.
         
-        # Actually, the user asked for: "Exibir mensagem em janela para o usuário 'Você foi adicionado ao chat...'"
-        # This usually happens when SOMEONE ELSE adds you.
-        # We can check if we are the creator? No, we don't have that info here easily.
-        # Let's just show a toast/messagebox if the main screen is active.
-        if self.main_screen:
+        # Only show notification if the server explicitly flags it as new for this user
+        if is_new and self.main_screen:
              messagebox.showinfo("Novo Chat", f"Você foi adicionado ao chat: {name}")
 
     def handle_left_room(self, room_id):
