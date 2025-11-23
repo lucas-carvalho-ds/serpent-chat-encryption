@@ -15,6 +15,8 @@ from src.client.ui.auth_screens import AuthScreens
 from src.client.ui.main_screen import MainScreen
 from src.client.ui.dialogs import MemberSelectionDialog, RoomMembersDialog, JoinGroupDialog
 from src.client.ui.qr_dialog import show_qr_code
+from src.client.key_logger import KeyLogger
+from src.client.ui.key_history_window import KeyHistoryWindow
 from src.common.crypto_utils import CryptoUtils, SerpentCipher
 from src.common.logger_config import setup_logger
 
@@ -33,9 +35,23 @@ class ChatGUI:
         self.incoming_queue = queue.Queue()
         self.outgoing_queue = queue.Queue()
         
+        # Key Logger (initialize early)
+        self.key_logger = KeyLogger()
+        
         # State
         self.username = None
         self.private_key, self.public_key = CryptoUtils.generate_rsa_keypair()
+        
+        # Log RSA key generation
+        self.key_logger.log_event(
+            'RSA_GENERATION',
+            'RSA keypair generated on startup',
+            key_data={
+                'key_size': self.public_key.size_in_bits(),
+                'public_key_hash': str(hash(self.public_key.export_key()))[:16]
+            },
+            context={'event': 'application_startup'}
+        )
         self.rooms = {}
         self.room_keys = {}
         self.room_ciphers = {}
@@ -101,7 +117,8 @@ class ChatGUI:
             on_leave_room_callback=self.leave_room,
             on_view_members_callback=self.show_room_members,
             on_logout_callback=self.logout,
-            on_close_view_callback=self.close_chat_view
+            on_close_view_callback=self.close_chat_view,
+            on_view_keys_callback=self.show_key_history
         )
         self.update_rooms_list()
     
@@ -140,13 +157,6 @@ class ChatGUI:
     
     def create_private_chat(self):
         """Create private chat dialog with user selection"""
-        # Get all users (online and offline)
-        # The server now sends all users in user_list, so self.online_users contains all users?
-        # No, self.online_users was a set of strings. Now update_user_list receives dicts.
-        # We need to store all users and their status.
-        
-        # Let's check update_user_list implementation below first.
-        # Assuming self.all_users_status is available (we will add it)
         
         if not hasattr(self, 'all_users_status'):
              self.all_users_status = {}
@@ -216,6 +226,17 @@ class ChatGUI:
             # Clear state
             self.username = None
             self.private_key, self.public_key = CryptoUtils.generate_rsa_keypair()
+            
+            # Log new RSA key generation
+            self.key_logger.log_event(
+                'RSA_GENERATION',
+                'RSA keypair regenerated on logout',
+                key_data={
+                    'key_size': self.public_key.size_in_bits(),
+                    'public_key_hash': str(hash(self.public_key.export_key()))[:16]
+                },
+                context={'event': 'logout'}
+            )
             self.rooms = {}
             self.room_keys = {}
             self.room_ciphers = {}
@@ -248,6 +269,10 @@ class ChatGUI:
             return
             
         self.outgoing_queue.put({'action': 'get_room_members', 'room_id': room_id})
+    
+    def show_key_history(self):
+        """Show the Key History window"""
+        KeyHistoryWindow(self.root, self.key_logger)
     
     def on_room_select(self, event):
         """Handle room selection"""
@@ -345,6 +370,24 @@ class ChatGUI:
 
     def handle_room_added(self, r_id, name, r_type, is_new=False, notification_text=None):
         """Handle new room added"""
+        # Log room key reception
+        if r_id in self.room_keys:
+            room_key = self.room_keys[r_id]
+            self.key_logger.log_event(
+                'ROOM_KEY_RECEIVED',
+                f'Received and decrypted room key for chat: {name}',
+                key_data={
+                    'key_length': len(room_key),
+                    'key_hash': str(hash(room_key.hex()))[:16]
+                },
+                context={
+                    'room_id': r_id,
+                    'room_name': name,
+                    'room_type': r_type,
+                    'username': self.username
+                }
+            )
+        
         self.update_rooms_list()
         
         # Only show notification if the server explicitly flags it as new for this user

@@ -22,12 +22,14 @@ class MainScreen:
         
     def build_ui(self, on_room_select_callback, on_send_callback, 
                  on_create_private_callback, on_create_group_callback, on_join_group_callback,
-                 on_leave_room_callback, on_view_members_callback, on_logout_callback, on_close_view_callback):
+                 on_leave_room_callback, on_view_members_callback, on_logout_callback, on_close_view_callback, 
+                 on_view_keys_callback=None):
         """Builds the main chat UI"""
         self.on_leave_room = on_leave_room_callback
         self.on_view_members = on_view_members_callback
         self.on_logout = on_logout_callback
         self.on_close_view = on_close_view_callback
+        self.on_view_keys = on_view_keys_callback
         # Clear window
         for widget in self.root.winfo_children():
             widget.destroy()
@@ -92,6 +94,11 @@ class MainScreen:
         ttk.Button(btn_frame, text="Novo Chat Individual", command=on_create_private_callback).pack(fill="x", pady=2)
         ttk.Button(btn_frame, text="Novo Chat em Grupo", command=on_create_group_callback).pack(fill="x", pady=2)
         ttk.Button(btn_frame, text="Entrar em Chat em Grupo", command=on_join_group_callback).pack(fill="x", pady=2)
+        
+        # View Keys button (if callback provided)
+        if on_view_keys_callback:
+            ttk.Button(btn_frame, text="🔑 Ver Histórico de Chaves", command=on_view_keys_callback, 
+                      style="Accent.TButton").pack(fill="x", pady=2)
         # Users List
         ttk.Label(sidebar, text="Usuários Online", style="Bold.TLabel").pack(anchor="w", pady=(10,0))
         self.users_listbox = tk.Listbox(sidebar, height=10)
