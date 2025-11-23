@@ -17,7 +17,7 @@ class AuthScreens:
         frame = ttk.Frame(root, padding="40")
         frame.place(relx=0.5, rely=0.5, anchor="center")
         
-        ttk.Label(frame, text="Serpent Chat Seguro", font=('Helvetica', 20, 'bold')).pack(pady=10)
+        ttk.Label(frame, text="SerpTalk", font=('Helvetica', 20, 'bold')).pack(pady=10)
         ttk.Label(frame, text="Sistema de Chat Criptografado", font=('Helvetica', 12)).pack(pady=5)
         
         ttk.Separator(frame, orient='horizontal').pack(fill='x', pady=20)

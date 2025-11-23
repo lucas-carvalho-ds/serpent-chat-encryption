@@ -1,5 +1,5 @@
 """
-Serpent Chat Client Package
+SerpTalk Client Package
 Modular client implementation for secure encrypted chat.
 """
 

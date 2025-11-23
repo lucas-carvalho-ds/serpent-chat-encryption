@@ -90,7 +90,7 @@ class NetworkThread(threading.Thread):
 class ChatGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Serpent Chat Seguro")
+        self.root.title("SerpTalk")
         self.root.geometry("900x600")
         
         self.incoming_queue = queue.Queue()
@@ -123,7 +123,7 @@ class ChatGUI:
         frame = ttk.Frame(self.root, padding="40")
         frame.place(relx=0.5, rely=0.5, anchor="center")
         
-        ttk.Label(frame, text="Serpent Chat Seguro", font=('Helvetica', 20, 'bold')).pack(pady=10)
+        ttk.Label(frame, text="SerpTalk", font=('Helvetica', 20, 'bold')).pack(pady=10)
         ttk.Label(frame, text="Sistema de Chat Criptografado", font=('Helvetica', 12)).pack(pady=5)
         
         ttk.Separator(frame, orient='horizontal').pack(fill='x', pady=20)
@@ -193,7 +193,7 @@ class ChatGUI:
         self.clear_window()
         
         # Update window title with username
-        self.root.title(f"Serpent Chat - {self.username}")
+        self.root.title(f"SerpTalk - {self.username}")
         
         # Main Layout: Sidebar (Rooms/Users) | Chat Area
         paned = ttk.PanedWindow(self.root, orient="horizontal")
@@ -211,7 +211,7 @@ class ChatGUI:
         ttk.Separator(user_header, orient='horizontal').pack(fill='x', pady=5)
         
         # Rooms List
-        ttk.Label(sidebar, text="Suas Salas", style="Bold.TLabel").pack(anchor="w")
+        ttk.Label(sidebar, text="Seus Chats", style="Bold.TLabel").pack(anchor="w")
         
         # Container for rooms list and empty state
         rooms_container = ttk.Frame(sidebar, height=200)
@@ -236,9 +236,9 @@ class ChatGUI:
         # Buttons
         btn_frame = ttk.Frame(sidebar)
         btn_frame.pack(fill="x", pady=5)
-        ttk.Button(btn_frame, text="Nova Sala Individual", command=self.create_private_chat).pack(fill="x", pady=2)
-        ttk.Button(btn_frame, text="Nova Sala em Grupo", command=self.create_group_chat).pack(fill="x", pady=2)
-        ttk.Button(btn_frame, text="Entrar em Sala em Grupo", command=self.join_room_dialog).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Novo Chat Individual", command=self.create_private_chat).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Novo Chat em Grupo", command=self.create_group_chat).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Entrar em Chat em Grupo", command=self.join_room_dialog).pack(fill="x", pady=2)
         
         # Users List
         ttk.Label(sidebar, text="Usuários Online", style="Bold.TLabel").pack(anchor="w", pady=(10,0))
@@ -475,7 +475,7 @@ class ChatGUI:
         })
 
     def create_private_chat(self):
-        target = simpledialog.askstring("Nova Sala Individual", "Nome do usuário:")
+        target = simpledialog.askstring("Novo Chat Individual", "Nome do usuário:")
         if not target:
             return
         
@@ -497,7 +497,7 @@ class ChatGUI:
         self.outgoing_queue.put({'action': 'create_private_chat', 'target_username': target})
 
     def create_group_chat(self):
-        name = simpledialog.askstring("Nova Sala em Grupo", "Nome do Grupo:")
+        name = simpledialog.askstring("Novo Chat em Grupo", "Nome do Grupo:")
         if not name:
             return
         

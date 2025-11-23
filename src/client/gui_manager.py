@@ -1,6 +1,6 @@
 """
 GUI Manager Module
-Main coordinator for the Serpent Chat client using modular architecture.
+Main coordinator for the SerpTalk client using modular architecture.
 """
 
 import tkinter as tk
@@ -26,7 +26,7 @@ class ChatGUI:
     
     def __init__(self, root):
         self.root = root
-        self.root.title("Serpent Chat Seguro")
+        self.root.title("SerpTalk")
         self.root.geometry("900x600")
         
         # Communication queues
@@ -193,7 +193,7 @@ class ChatGUI:
     
     def join_room_dialog(self):
         """Join room dialog"""
-        r_id = simpledialog.askinteger("Entrar em Sala em Grupo", "ID da Sala:")
+        r_id = simpledialog.askinteger("Entrar em Chat em Grupo", "ID do Chat:")
         if r_id:
             self.outgoing_queue.put({'action': 'join_room', 'room_id': r_id})
 
@@ -221,7 +221,7 @@ class ChatGUI:
 
     def leave_room(self, room_id):
         """Leave a room"""
-        if messagebox.askyesno("Sair da Sala", "Tem certeza que deseja sair desta sala?"):
+        if messagebox.askyesno("Sair do Chat", "Tem certeza que deseja sair deste chat?"):
             self.outgoing_queue.put({'action': 'leave_room', 'room_id': room_id})
 
     def show_room_members(self, room_id):
@@ -257,7 +257,7 @@ class ChatGUI:
         text = self.main_screen.msg_entry.get().strip()
         
         if not self.active_room_id:
-            messagebox.showwarning("Aviso", "Por favor, selecione uma sala antes de enviar mensagens.")
+            messagebox.showwarning("Aviso", "Por favor, selecione um chat antes de enviar mensagens.")
             return
         
         if not text:
@@ -273,7 +273,7 @@ class ChatGUI:
             if len(other_online) == 0:
                 messagebox.showwarning(
                     "Sem destinatários online",
-                    "Não há outros usuários online nesta sala no momento.\n\n"
+                    "Não há outros usuários online neste chat no momento.\n\n"
                     "Sua mensagem não será recebida por ninguém agora."
                 )
                 return
@@ -337,13 +337,13 @@ class ChatGUI:
             if self.active_room_id == room_id:
                 self.active_room_id = None
                 if self.main_screen:
-                    self.main_screen.chat_header.config(text="Selecione uma sala")
+                    self.main_screen.chat_header.config(text="Selecione um chat")
                     self.main_screen.chat_history.config(state='normal')
                     self.main_screen.chat_history.delete(1.0, tk.END)
                     self.main_screen.chat_history.config(state='disabled')
             
             self.update_rooms_list()
-            messagebox.showinfo("Sucesso", "Você saiu da sala.")
+            messagebox.showinfo("Sucesso", "Você saiu do chat.")
 
     def handle_room_members(self, room_id, members):
         """Handle receiving room members list"""

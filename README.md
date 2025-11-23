@@ -1,4 +1,4 @@
-# Serpent Chat Encryption
+# SerpTalk Encryption
 
 Um sistema de chat seguro desenvolvido com foco nos 4 pilares da Segurança da Informação: **Confidencialidade**, **Integridade**, **Disponibilidade** e **Autenticidade**.
 

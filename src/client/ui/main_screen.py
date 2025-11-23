@@ -32,7 +32,7 @@ class MainScreen:
             widget.destroy()
         
         # Update window title with username
-        self.root.title(f"Serpent Chat - {self.username}")
+        self.root.title(f"SerpTalk - {self.username}")
         
         # Main Layout: Sidebar (Rooms/Users) | Chat Area
         paned = ttk.PanedWindow(self.root, orient="horizontal")
@@ -54,7 +54,7 @@ class MainScreen:
         ttk.Separator(user_header, orient='horizontal').pack(fill='x', pady=5)
         
         # Rooms List
-        ttk.Label(sidebar, text="Suas Salas", style="Bold.TLabel").pack(anchor="w")
+        ttk.Label(sidebar, text="Seus Chats", style="Bold.TLabel").pack(anchor="w")
         
         # Container for rooms list and empty state
         rooms_container = ttk.Frame(sidebar, height=200)
@@ -71,11 +71,11 @@ class MainScreen:
         self.room_context_menu = tk.Menu(self.root, tearoff=0)
         self.room_context_menu.add_command(label="Ver Participantes", command=self.view_room_members)
         self.room_context_menu.add_separator()
-        self.room_context_menu.add_command(label="Sair da Sala", command=self.leave_room)
+        self.room_context_menu.add_command(label="Sair do Chat", command=self.leave_room)
         
         # Empty state label for when no rooms exist
         self.empty_rooms_label = ttk.Label(rooms_container,
-                                           text="Você ainda não entrou\nem nenhuma sala.\n\nCrie ou entre em uma conversa\nusando os botões abaixo! 👇",
+                                           text="Você ainda não entrou\nem nenhum chat.\n\nCrie ou entre em uma conversa\nusando os botões abaixo! 👇",
                                            font=('Helvetica', 9, 'italic'),
                                            foreground='gray',
                                            justify='center',
@@ -87,9 +87,9 @@ class MainScreen:
         # Buttons
         btn_frame = ttk.Frame(sidebar)
         btn_frame.pack(fill="x", pady=5)
-        ttk.Button(btn_frame, text="Nova Sala Individual", command=on_create_private_callback).pack(fill="x", pady=2)
-        ttk.Button(btn_frame, text="Nova Sala em Grupo", command=on_create_group_callback).pack(fill="x", pady=2)
-        ttk.Button(btn_frame, text="Entrar em Sala em Grupo", command=on_join_group_callback).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Novo Chat Individual", command=on_create_private_callback).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Novo Chat em Grupo", command=on_create_group_callback).pack(fill="x", pady=2)
+        ttk.Button(btn_frame, text="Entrar em Chat em Grupo", command=on_join_group_callback).pack(fill="x", pady=2)
         # Users List
         ttk.Label(sidebar, text="Usuários Online", style="Bold.TLabel").pack(anchor="w", pady=(10,0))
         self.users_listbox = tk.Listbox(sidebar, height=10)
@@ -99,7 +99,7 @@ class MainScreen:
         chat_frame = ttk.Frame(paned, padding="5")
         paned.add(chat_frame, weight=4)
         
-        self.chat_header = ttk.Label(chat_frame, text="Selecione uma sala", font=('Helvetica', 12, 'bold'))
+        self.chat_header = ttk.Label(chat_frame, text="Selecione um chat", font=('Helvetica', 12, 'bold'))
         self.chat_header.pack(anchor="w", pady=5)
         
         self.chat_history = scrolledtext.ScrolledText(chat_frame, state='disabled', wrap='word')

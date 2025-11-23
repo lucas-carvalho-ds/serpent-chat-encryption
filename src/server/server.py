@@ -242,17 +242,17 @@ class ChatServer:
         # Verificar se sala existe e tipo
         room_type = self.db.get_room_type(room_id)
         if not room_type:
-             return {'status': 'error', 'message': 'Sala não encontrada.'}
+             return {'status': 'error', 'message': 'Chat não encontrado.'}
         
         if room_type == 'private':
-             return {'status': 'error', 'message': 'Não é permitido entrar salas individuais.'}
+             return {'status': 'error', 'message': 'Não é permitido entrar chats individuais.'}
              
         room_key = self.db.get_room_key(room_id)
              
         # Adicionar membro
         success = self.db.add_room_member(room_id, user_id)
         if not success:
-             return {'status': 'error', 'message': 'Você já está nesta sala ou erro ao entrar.'}
+             return {'status': 'error', 'message': 'Você já está neste chat ou erro ao entrar.'}
              
         # Pegar info da sala para enviar ao usuário
         # Precisamos do nome e tipo. Vamos fazer uma query rápida ou adicionar método no DB.

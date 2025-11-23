@@ -1,10 +1,10 @@
-# Manual do Usuário - Serpent Chat
+# Manual do Usuário - SerpTalk
 
-Este manual descreve como utilizar o sistema de chat seguro Serpent Chat.
+Este manual descreve como utilizar o sistema de chat seguro SerpTalk.
 
 ## 1. Visão Geral
 
-O Serpent Chat é uma ferramenta de comunicação que prioriza a segurança. Ele garante que suas mensagens sejam lidas apenas pelos destinatários autorizados, utilizando criptografia ponta-a-ponta com o algoritmo Serpent e autenticação de dois fatores (2FA).
+O SerpTalk é uma ferramenta de comunicação que prioriza a segurança. Ele garante que suas mensagens sejam lidas apenas pelos destinatários autorizados, utilizando criptografia ponta-a-ponta com o algoritmo Serpent e autenticação de dois fatores (2FA).
 
 **Interface Disponível:**
 
@@ -60,71 +60,71 @@ A janela principal é dividida em três áreas:
 
 #### Barra Lateral Esquerda
 
-- **Lista de Salas**: Mostra todas as suas conversas (individuais e em grupo)
-  - **Clique com botão direito** em uma sala para ver o menu de contexto com opções:
-    - **"Ver Participantes"**: Visualizar membros da sala e seus status
-    - **"Sair da Sala"**: Sair da conversa
+- **Lista de Chats**: Mostra todas as suas conversas (individuais e em grupo)
+  - **Clique com botão direito** em um chat para ver o menu de contexto com opções:
+    - **"Ver Participantes"**: Visualizar membros do chat e seus status
+    - **"Sair do Chat"**: Sair da conversa
 - **Usuários Online**: Lista de usuários conectados atualmente
   - 🟢 Indica usuário **online**
   - ⚫ Indica usuário **offline**
 - **Botões de Ação**:
-  - **"Nova Sala Individual"**: Criar conversa individual com um usuário
-  - **"Nova Sala em Grupo"**: Criar sala de chat em grupo
-  - **"Entrar em Sala em Grupo"**: Entrar em uma sala existente pelo ID
+  - **"Novo Chat Individual"**: Criar chat individual com um usuário
+  - **"Novo Chat em Grupo"**: Criar chat em grupo
+  - **"Entrar em Chat em Grupo"**: Entrar em um chat existente pelo ID
 - **Botão Sair (Logout)**: No topo da barra lateral, para fazer logout com segurança
 
 #### Área Central
 
-- **Área de Mensagens**: Visualização das mensagens da sala selecionada
+- **Área de Mensagens**: Visualização das mensagens do chat selecionado
 - **Campo de Entrada**: Digite sua mensagem aqui
 - **Botão "Enviar"**: Clique para enviar a mensagem (ou pressione Enter)
 
-### 3.4. Criando uma Nova Sala Individual
+### 3.4. Criando um Novo Chat Individual
 
-1. Clique no botão **"Nova Sala Individual"**
+1. Clique no botão **"Novo Chat Individual"**
 2. Digite o nome de usuário do destinatário
 3. Clique em **"Criar"**
-4. A nova conversa aparecerá na lista de salas
+4. O novo chat aparecerá na lista de chats
 5. Clique nela para começar a conversar
 
-### 3.5. Criando uma Nova Sala em Grupo
+### 3.5. Criando um Novo Chat em Grupo
 
-1. Clique no botão **"Nova Sala em Grupo"**
+1. Clique no botão **"Novo Chat em Grupo"**
 2. Digite o **nome do grupo**
 3. Selecione os membros usando as **caixas de seleção (checkboxes)**:
    - Marque os usuários que deseja adicionar ao grupo
    - Você pode selecionar múltiplos usuários
    - **Você será automaticamente incluído** como membro (não precisa se selecionar)
 4. Clique em **"Criar"**
-5. O novo grupo aparecerá na lista de salas
+5. O novo grupo aparecerá na lista de chats
 
-### 3.6. Visualizando Membros de uma Sala
+### 3.6. Visualizando Membros de um Chat
 
-1. **Clique com o botão direito** na sala desejada na lista de salas
+1. **Clique com o botão direito** no chat desejado na lista de chats
 2. Selecione **"Ver Participantes"** no menu
 3. Uma janela será aberta mostrando:
-   - Lista de todos os membros da sala
+   - Lista de todos os membros do chat
    - Status de cada membro:
      - 🟢 **Online**: Usuário está conectado no momento
      - ⚫ **Offline**: Usuário não está conectado
 
-### 3.7. Saindo de uma Sala
+### 3.7. Saindo de um Chat
 
-1. **Clique com o botão direito** na sala que deseja sair
-2. Selecione **"Sair da Sala"** no menu de contexto
-3. A sala será removida da sua lista de salas
+1. **Clique com o botão direito** no chat que deseja sair
+2. Selecione **"Sair do Chat"** no menu de contexto
+3. O chat será removido da sua lista de chats
 4. Você não receberá mais mensagens dessa conversa
 
 ### 3.8. Enviando Mensagens
 
-1. Selecione uma sala/conversa na lista de salas
+1. Selecione um chat/conversa na lista de chats
 2. Digite sua mensagem no campo de entrada
 3. Pressione **Enter** ou clique em **"Enviar"**
-4. A mensagem será criptografada e enviada para todos os membros da sala
+4. A mensagem será criptografada e enviada para todos os membros do chat
 
 ### 3.9. Visualizando Histórico
 
-Ao selecionar uma sala, o histórico de mensagens anteriores é carregado automaticamente e descriptografado localmente no seu cliente.
+Ao selecionar um chat, o histórico de mensagens anteriores é carregado automaticamente e descriptografado localmente no seu cliente.
 
 ## 4. Funcionalidades de Segurança Explicadas
 
@@ -136,7 +136,7 @@ Diferente do AES padrão, utilizamos o **Serpent**, um algoritmo conhecido por s
 
 Cada sala de chat (individual ou em grupo) possui sua própria **chave Serpent exclusiva**:
 
-- Mensagens de salas diferentes não podem ser descriptografadas com a mesma chave
+- Mensagens de chats diferentes não podem ser descriptografadas com a mesma chave
 - Se uma chave for comprometida, apenas aquela sala é afetada
 - O servidor nunca tem acesso às chaves descriptografadas
 

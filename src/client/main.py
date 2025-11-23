@@ -1,5 +1,5 @@
 """
-Serpent Chat Client - Main Entry Point
+SerpTalk Client - Main Entry Point
 Fully modular architecture with separated concerns.
 """
 
