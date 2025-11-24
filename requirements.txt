@@ -1,4 +1,0 @@
-prompt_toolkit==3.0.52
-pycryptodome==3.23.0
-pyserpent==1.0.1
-wcwidth==0.2.14
