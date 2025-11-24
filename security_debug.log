@@ -1,0 +1,369 @@
+[2025-11-24 13:51:32] [AVAILABILITY] [Server] Server started on 0.0.0.0:8888
+[2025-11-24 13:51:46] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 63983)
+[2025-11-24 13:52:27] [AVAILABILITY] [Server] User carlos connected and authenticated
+[2025-11-24 13:52:36] [CONFIDENTIALITY] [Server] Stored encrypted keys for group chat aaa
+[2025-11-24 13:52:36] [CONFIDENTIALITY] [Server] Sending encrypted room key to carlos
+[2025-11-24 13:52:56] [AVAILABILITY] [Server] User carlos connected and authenticated
+[2025-11-24 13:53:14] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 63998)
+[2025-11-24 13:53:42] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 13:53:51] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 63998) (User: ana)
+[2025-11-24 13:55:01] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 63983) (User: carlos)
+[2025-11-24 14:00:00] [AVAILABILITY] [Server] Server started on 0.0.0.0:8888
+[2025-11-24 14:00:09] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 64143)
+[2025-11-24 14:01:01] [AUTHENTICITY] [Client] Generated new RSA keys for carlos1 | Context: {'key_hash': '-714176970049987'}
+[2025-11-24 14:01:01] [AUTHENTICITY] [Client] Attempting registration for user carlos1
+[2025-11-24 14:02:02] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:02:03] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:02:14] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:02:14] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:02:14] [AVAILABILITY] [Server] User carlos1 connected and authenticated
+[2025-11-24 14:02:37] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 64170)
+[2025-11-24 14:02:46] [AUTHENTICITY] [Client] Generated new RSA keys for ana | Context: {'key_hash': '-617006521441412'}
+[2025-11-24 14:02:46] [AUTHENTICITY] [Client] Attempting registration for user ana
+[2025-11-24 14:03:10] [AUTHENTICITY] [Client] Loaded existing RSA keys for ana
+[2025-11-24 14:03:10] [AUTHENTICITY] [Client] Attempting login for user ana
+[2025-11-24 14:03:10] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 14:03:17] [CONFIDENTIALITY] [Server] Stored encrypted keys for private chat ana-carlos1
+[2025-11-24 14:03:17] [CONFIDENTIALITY] [Server] Sending encrypted room key to ana
+[2025-11-24 14:03:17] [CONFIDENTIALITY] [Server] Sending encrypted room key to carlos1
+[2025-11-24 14:03:24] [CONFIDENTIALITY] [Server] Stored encrypted keys for group chat aaaa
+[2025-11-24 14:03:24] [CONFIDENTIALITY] [Server] Sending encrypted room key to ana
+[2025-11-24 14:03:24] [CONFIDENTIALITY] [Server] Sending encrypted room key to carlos1
+[2025-11-24 14:03:41] [AUTHENTICITY] [Client] User ana logging out
+[2025-11-24 14:03:50] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 64143) (User: carlos1)
+[2025-11-24 14:04:07] [AUTHENTICITY] [Client] Loaded existing RSA keys for ana
+[2025-11-24 14:04:07] [AUTHENTICITY] [Client] Attempting login for user ana
+[2025-11-24 14:04:07] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 14:05:33] [AUTHENTICITY] [Client] User ana logging out
+[2025-11-24 14:05:58] [AUTHENTICITY] [Client] Generated new RSA keys for carlos | Context: {'key_hash': '3223298904764873'}
+[2025-11-24 14:05:58] [AUTHENTICITY] [Client] Attempting login for user carlos
+[2025-11-24 14:06:16] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:06:16] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:06:16] [AVAILABILITY] [Server] User carlos1 connected and authenticated
+[2025-11-24 14:08:08] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 64233)
+[2025-11-24 14:08:28] [AUTHENTICITY] [Client] Loaded existing RSA keys for ana
+[2025-11-24 14:08:28] [AUTHENTICITY] [Client] Attempting login for user ana
+[2025-11-24 14:08:29] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 14:09:29] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 64233) (User: ana)
+[2025-11-24 14:16:13] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 64170) (User: carlos1)
+[2025-11-24 14:16:16] [AVAILABILITY] [Server] Server started on 0.0.0.0:8888
+[2025-11-24 14:16:19] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 64392)
+[2025-11-24 14:16:41] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:16:41] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:16:41] [AVAILABILITY] [Server] User carlos1 connected and authenticated
+[2025-11-24 14:16:50] [CONFIDENTIALITY] [Client] Invited ana to group aaaa
+[2025-11-24 14:17:22] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 64402)
+[2025-11-24 14:17:42] [AUTHENTICITY] [Client] Loaded existing RSA keys for ana
+[2025-11-24 14:17:42] [AUTHENTICITY] [Client] Attempting login for user ana
+[2025-11-24 14:17:42] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 14:18:30] [CONFIDENTIALITY] [Server] Stored encrypted keys for group chat asas
+[2025-11-24 14:18:30] [CONFIDENTIALITY] [Server] Sending encrypted room key to carlos1
+[2025-11-24 14:18:30] [CONFIDENTIALITY] [Server] Sending encrypted room key to ana
+[2025-11-24 14:18:49] [CONFIDENTIALITY] [Client] Invited ana to group asas
+[2025-11-24 14:18:49] [CONFIDENTIALITY] [Server] User carlos1 invited ana to room 3
+[2025-11-24 14:19:18] [CONFIDENTIALITY] [Client] Invited carlos1 to group asas
+[2025-11-24 14:19:18] [CONFIDENTIALITY] [Server] User ana invited carlos1 to room 3
+[2025-11-24 14:19:28] [CONFIDENTIALITY] [Server] Stored encrypted keys for group chat asdasd
+[2025-11-24 14:19:28] [CONFIDENTIALITY] [Server] Sending encrypted room key to carlos1
+[2025-11-24 14:19:28] [CONFIDENTIALITY] [Server] Sending encrypted room key to ana
+[2025-11-24 14:20:18] [AUTHENTICITY] [Client] User carlos1 logging out
+[2025-11-24 14:20:20] [AUTHENTICITY] [Client] User ana logging out
+[2025-11-24 14:21:10] [AUTHENTICITY] [Client] Loaded existing RSA keys for ana
+[2025-11-24 14:21:10] [AUTHENTICITY] [Client] Attempting login for user ana
+[2025-11-24 14:21:10] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 14:21:30] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:21:30] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:21:38] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:21:38] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:21:39] [AVAILABILITY] [Server] User carlos1 connected and authenticated
+[2025-11-24 14:21:52] [CONFIDENTIALITY] [Client] Invited ana to group asdasd
+[2025-11-24 14:21:52] [CONFIDENTIALITY] [Server] User carlos1 invited ana to room 4
+[2025-11-24 14:24:26] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 64402) (User: ana)
+[2025-11-24 14:36:03] [AUTHENTICITY] [Client] User carlos1 logging out
+[2025-11-24 14:36:28] [AUTHENTICITY] [Client] Loaded existing RSA keys for ana
+[2025-11-24 14:36:28] [AUTHENTICITY] [Client] Attempting login for user ana
+[2025-11-24 14:36:28] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 14:37:05] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 50565)
+[2025-11-24 14:37:28] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:37:28] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:37:28] [AVAILABILITY] [Server] User carlos1 connected and authenticated
+[2025-11-24 14:37:41] [CONFIDENTIALITY] [Client] Invited carlos1 to group asdasd
+[2025-11-24 14:37:41] [CONFIDENTIALITY] [Server] User ana invited carlos1 to room 4
+[2025-11-24 14:39:14] [AUTHENTICITY] [Client] User carlos1 logging out
+[2025-11-24 14:39:17] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 50565) (User: carlos1)
+[2025-11-24 14:39:20] [AUTHENTICITY] [Client] User ana logging out
+[2025-11-24 14:39:21] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 64392) (User: ana)
+[2025-11-24 14:41:41] [AVAILABILITY] [Server] Server started on 0.0.0.0:8888
+[2025-11-24 14:41:52] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 50652)
+[2025-11-24 14:42:18] [AUTHENTICITY] [Client] Loaded existing RSA keys for ana
+[2025-11-24 14:42:18] [AUTHENTICITY] [Client] Attempting login for user ana
+[2025-11-24 14:42:18] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 14:42:26] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 50660)
+[2025-11-24 14:42:40] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:42:40] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:42:40] [AVAILABILITY] [Server] User carlos1 connected and authenticated
+[2025-11-24 14:42:52] [CONFIDENTIALITY] [Client] Invited ana to group asdasd
+[2025-11-24 14:42:52] [CONFIDENTIALITY] [Server] User carlos1 invited ana to room 4
+[2025-11-24 14:42:58] [CONFIDENTIALITY] [Server] Requested ana to rotate key for room 4 after carlos1 left
+[2025-11-24 14:42:58] [CONFIDENTIALITY] [Client] Auto-rotated key for room asdasd | Context: {'reason': 'carlos1 saiu do grupo', 'new_key_hash': '3609451709855757'}
+[2025-11-24 14:42:58] [CONFIDENTIALITY] [Server] User ana rotated key for room 4
+[2025-11-24 14:43:38] [AUTHENTICITY] [Client] User ana logging out
+[2025-11-24 14:43:41] [AUTHENTICITY] [Client] User carlos1 logging out
+[2025-11-24 14:43:43] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 50660) (User: carlos1)
+[2025-11-24 14:43:44] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 50652) (User: ana)
+[2025-11-24 14:49:56] [AVAILABILITY] [Server] ========== SERVER STARTED ==========
+[2025-11-24 14:49:56] [AVAILABILITY] [Server] Server listening on 0.0.0.0:8888
+[2025-11-24 14:49:56] [AVAILABILITY] [Server] Database: chat.db
+[2025-11-24 14:50:08] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 50767)
+[2025-11-24 14:50:30] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:50:30] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:50:43] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:50:43] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:50:52] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 50767) (User: None)
+[2025-11-24 14:51:21] [AVAILABILITY] [Server] ========== SERVER STOPPED ==========
+[2025-11-24 14:55:02] [AVAILABILITY] [Server] ========== SERVER STARTED ==========
+[2025-11-24 14:55:02] [AVAILABILITY] [Server] Server listening on 0.0.0.0:8888
+[2025-11-24 14:55:02] [AVAILABILITY] [Server] Database: chat.db
+[2025-11-24 14:55:09] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 61683)
+[2025-11-24 14:55:28] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:55:28] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:55:33] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 61683) (User: None)
+[2025-11-24 14:57:24] [AVAILABILITY] [Server] ========== SERVER STOPPED ==========
+[2025-11-24 14:57:29] [AVAILABILITY] [Server] ========== SERVER STARTED ==========
+[2025-11-24 14:57:29] [AVAILABILITY] [Server] Server listening on 0.0.0.0:8888
+[2025-11-24 14:57:29] [AVAILABILITY] [Server] Database: chat.db
+[2025-11-24 14:57:37] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 61743)
+[2025-11-24 14:57:57] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 14:57:57] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 14:57:57] [AUTHENTICITY] [AuthManager] Authenticating user carlos1
+[2025-11-24 14:57:57] [AUTHENTICITY] [AuthManager] Step 1: Verifying password hash (bcrypt)
+[2025-11-24 14:57:57] [AUTHENTICITY] [AuthManager] Step 1: Password verified for carlos1
+[2025-11-24 14:57:57] [AUTHENTICITY] [AuthManager] Step 2: Verifying 2FA code
+[2025-11-24 14:57:57] [AUTHENTICITY] [AuthManager] Step 2: 2FA verified for carlos1
+[2025-11-24 14:57:57] [AUTHENTICITY] [AuthManager] User carlos1 authenticated successfully
+[2025-11-24 14:57:57] [AVAILABILITY] [Server] User carlos1 connected and authenticated
+[2025-11-24 14:58:12] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 61751)
+[2025-11-24 14:58:26] [AUTHENTICITY] [Client] Loaded existing RSA keys for ana
+[2025-11-24 14:58:26] [AUTHENTICITY] [Client] Attempting login for user ana
+[2025-11-24 14:58:26] [AUTHENTICITY] [AuthManager] Authenticating user ana
+[2025-11-24 14:58:26] [AUTHENTICITY] [AuthManager] Step 1: Verifying password hash (bcrypt)
+[2025-11-24 14:58:27] [AUTHENTICITY] [AuthManager] Step 1: Password verified for ana
+[2025-11-24 14:58:27] [AUTHENTICITY] [AuthManager] Step 2: Verifying 2FA code
+[2025-11-24 14:58:27] [AUTHENTICITY] [AuthManager] Step 2: 2FA verified for ana
+[2025-11-24 14:58:27] [AUTHENTICITY] [AuthManager] User ana authenticated successfully
+[2025-11-24 14:58:27] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 14:58:34] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 61756)
+[2025-11-24 14:58:48] [AUTHENTICITY] [Client] Generated new RSA keys for luiz | Context: {'key_hash': '-163093771299221'}
+[2025-11-24 14:58:48] [AUTHENTICITY] [Client] Attempting registration for user luiz
+[2025-11-24 14:58:48] [AUTHENTICITY] [AuthManager] Registering user luiz
+[2025-11-24 14:58:48] [AUTHENTICITY] [AuthManager] Password hashed with bcrypt (salt included in hash)
+[2025-11-24 14:58:48] [AUTHENTICITY] [AuthManager] Generated 2FA secret for luiz
+[2025-11-24 14:58:48] [AUTHENTICITY] [AuthManager] User luiz registered successfully | Context: {'user_id': 3}
+[2025-11-24 14:59:14] [AUTHENTICITY] [Client] Loaded existing RSA keys for luiz
+[2025-11-24 14:59:14] [AUTHENTICITY] [Client] Attempting login for user luiz
+[2025-11-24 14:59:14] [AUTHENTICITY] [AuthManager] Authenticating user luiz
+[2025-11-24 14:59:14] [AUTHENTICITY] [AuthManager] Step 1: Verifying password hash (bcrypt)
+[2025-11-24 14:59:14] [AUTHENTICITY] [AuthManager] Step 1: Password verified for luiz
+[2025-11-24 14:59:14] [AUTHENTICITY] [AuthManager] Step 2: Verifying 2FA code
+[2025-11-24 14:59:14] [AUTHENTICITY] [AuthManager] Step 2: 2FA verified for luiz
+[2025-11-24 14:59:14] [AUTHENTICITY] [AuthManager] User luiz authenticated successfully
+[2025-11-24 14:59:14] [AVAILABILITY] [Server] User luiz connected and authenticated
+[2025-11-24 14:59:32] [CONFIDENTIALITY] [Client] Invited luiz to group asas
+[2025-11-24 14:59:32] [CONFIDENTIALITY] [Server] User carlos1 invited luiz to room 3
+[2025-11-24 14:59:53] [CONFIDENTIALITY] [Server] Requested carlos1 to rotate key for room 3 after ana left
+[2025-11-24 15:00:03] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:00:03] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:00:03] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:00:03] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 9)
+[2025-11-24 15:00:09] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:00:09] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:00:09] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:00:09] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 10)
+[2025-11-24 15:00:16] [CONFIDENTIALITY] [Server] User luiz sending encrypted message to 'asas'
+[2025-11-24 15:00:16] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:00:16] [INTEGRITY] [Server] Message signed with HMAC by luiz
+[2025-11-24 15:00:16] [INTEGRITY] [Database] Encrypted message from luiz saved to DB (ID: 11)
+[2025-11-24 15:00:21] [CONFIDENTIALITY] [Server] User ana sending encrypted message to 'ana-carlos1'
+[2025-11-24 15:00:21] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:00:21] [INTEGRITY] [Server] Message signed with HMAC by ana
+[2025-11-24 15:00:21] [INTEGRITY] [Database] Encrypted message from ana saved to DB (ID: 12)
+[2025-11-24 15:00:23] [CONFIDENTIALITY] [Server] User ana sending encrypted message to 'ana-carlos1'
+[2025-11-24 15:00:23] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:00:23] [INTEGRITY] [Server] Message signed with HMAC by ana
+[2025-11-24 15:00:23] [INTEGRITY] [Database] Encrypted message from ana saved to DB (ID: 13)
+[2025-11-24 15:00:29] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'ana-carlos1'
+[2025-11-24 15:00:29] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:00:29] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:00:29] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 14)
+[2025-11-24 15:00:43] [CONFIDENTIALITY] [Server] User ana sending encrypted message to 'asdasd'
+[2025-11-24 15:00:43] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:00:43] [INTEGRITY] [Server] Message signed with HMAC by ana
+[2025-11-24 15:00:43] [INTEGRITY] [Database] Encrypted message from ana saved to DB (ID: 15)
+[2025-11-24 15:01:56] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 61743) (User: carlos1)
+[2025-11-24 15:01:57] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 61751) (User: ana)
+[2025-11-24 15:01:58] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 61756) (User: luiz)
+[2025-11-24 15:02:41] [AVAILABILITY] [Server] ========== SERVER STOPPED ==========
+[2025-11-24 15:04:40] [AVAILABILITY] [Server] ========== SERVER STARTED ==========
+[2025-11-24 15:04:41] [AVAILABILITY] [Server] Server listening on 0.0.0.0:8888
+[2025-11-24 15:04:41] [AVAILABILITY] [Server] Database: chat.db
+[2025-11-24 15:05:11] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 61843)
+[2025-11-24 15:05:39] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 15:05:39] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 15:05:39] [AUTHENTICITY] [AuthManager] Authenticating user carlos1
+[2025-11-24 15:05:39] [AUTHENTICITY] [AuthManager] Step 1: Verifying password hash (bcrypt)
+[2025-11-24 15:05:40] [AUTHENTICITY] [AuthManager] Step 1: Password verified for carlos1
+[2025-11-24 15:05:40] [AUTHENTICITY] [AuthManager] Step 2: Verifying 2FA code
+[2025-11-24 15:05:40] [AUTHENTICITY] [AuthManager] Step 2: 2FA verified for carlos1
+[2025-11-24 15:05:40] [AUTHENTICITY] [AuthManager] User carlos1 authenticated successfully
+[2025-11-24 15:05:40] [AVAILABILITY] [Server] User carlos1 connected and authenticated
+[2025-11-24 15:05:46] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:05:46] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:05:46] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:05:46] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 16)
+[2025-11-24 15:05:46] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'asas'
+[2025-11-24 15:05:46] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:05:46] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:05:46] [CONFIDENTIALITY] [Client] Message decrypted successfully: ''
+[2025-11-24 15:05:49] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:05:49] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:05:49] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:05:49] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 17)
+[2025-11-24 15:05:49] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'asas'
+[2025-11-24 15:05:49] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:05:49] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:05:49] [CONFIDENTIALITY] [Client] Message decrypted successfully: ''
+[2025-11-24 15:05:51] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:05:51] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:05:51] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:05:51] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 18)
+[2025-11-24 15:05:52] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'asas'
+[2025-11-24 15:05:52] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:05:52] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:05:52] [CONFIDENTIALITY] [Client] Message decrypted successfully: ''
+[2025-11-24 15:07:31] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:07:32] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:07:32] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:07:32] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 19)
+[2025-11-24 15:07:32] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'asas'
+[2025-11-24 15:07:32] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:07:32] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:07:32] [CONFIDENTIALITY] [Client] Message decrypted successfully: ''
+[2025-11-24 15:08:03] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 61843) (User: carlos1)
+[2025-11-24 15:08:07] [AVAILABILITY] [Server] ========== SERVER STOPPED ==========
+[2025-11-24 15:10:17] [AVAILABILITY] [Server] ========== SERVER STARTED ==========
+[2025-11-24 15:10:17] [AVAILABILITY] [Server] Server listening on 0.0.0.0:8888
+[2025-11-24 15:10:17] [AVAILABILITY] [Server] Database: chat.db
+[2025-11-24 15:10:26] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 61936)
+[2025-11-24 15:10:46] [AUTHENTICITY] [Client] Loaded existing RSA keys for carlos1
+[2025-11-24 15:10:46] [AUTHENTICITY] [Client] Attempting login for user carlos1
+[2025-11-24 15:10:46] [AUTHENTICITY] [AuthManager] Authenticating user carlos1
+[2025-11-24 15:10:46] [AUTHENTICITY] [AuthManager] Step 1: Verifying password hash (bcrypt)
+[2025-11-24 15:10:46] [AUTHENTICITY] [AuthManager] Step 1: Password verified for carlos1
+[2025-11-24 15:10:46] [AUTHENTICITY] [AuthManager] Step 2: Verifying 2FA code
+[2025-11-24 15:10:46] [AUTHENTICITY] [AuthManager] Step 2: 2FA verified for carlos1
+[2025-11-24 15:10:46] [AUTHENTICITY] [AuthManager] User carlos1 authenticated successfully
+[2025-11-24 15:10:46] [AVAILABILITY] [Server] User carlos1 connected and authenticated
+[2025-11-24 15:10:52] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:10:52] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:10:52] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:10:52] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 20)
+[2025-11-24 15:10:52] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'asas'
+[2025-11-24 15:10:52] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:10:52] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:10:52] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'oi'
+[2025-11-24 15:10:54] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:10:54] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:10:54] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:10:54] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 21)
+[2025-11-24 15:10:54] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'asas'
+[2025-11-24 15:10:54] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:10:54] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:10:54] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'asdasd'
+[2025-11-24 15:10:55] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:10:55] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:10:55] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:10:55] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 22)
+[2025-11-24 15:10:55] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'asas'
+[2025-11-24 15:10:55] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:10:55] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:10:55] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'AKSDJANSD'
+[2025-11-24 15:10:57] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:10:57] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:10:57] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:10:57] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 23)
+[2025-11-24 15:10:57] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'asas'
+[2025-11-24 15:10:57] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:10:57] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:10:57] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'FUNCIONA'
+[2025-11-24 15:11:04] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'asas'
+[2025-11-24 15:11:04] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:11:04] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:11:04] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 24)
+[2025-11-24 15:11:04] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'asas'
+[2025-11-24 15:11:04] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:11:04] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:11:04] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'FRANKENSTEIN ESTÁ VIVO'
+[2025-11-24 15:11:25] [AVAILABILITY] [Server] New connection from ('127.0.0.1', 61949)
+[2025-11-24 15:11:40] [AUTHENTICITY] [Client] Loaded existing RSA keys for ana
+[2025-11-24 15:11:40] [AUTHENTICITY] [Client] Attempting login for user ana
+[2025-11-24 15:11:40] [AUTHENTICITY] [AuthManager] Authenticating user ana
+[2025-11-24 15:11:40] [AUTHENTICITY] [AuthManager] Step 1: Verifying password hash (bcrypt)
+[2025-11-24 15:11:41] [AUTHENTICITY] [AuthManager] Step 1: Password verified for ana
+[2025-11-24 15:11:41] [AUTHENTICITY] [AuthManager] Step 2: Verifying 2FA code
+[2025-11-24 15:11:41] [AUTHENTICITY] [AuthManager] Step 2: 2FA verified for ana
+[2025-11-24 15:11:41] [AUTHENTICITY] [AuthManager] User ana authenticated successfully
+[2025-11-24 15:11:41] [AVAILABILITY] [Server] User ana connected and authenticated
+[2025-11-24 15:11:46] [CONFIDENTIALITY] [Server] User ana sending encrypted message to 'ana-carlos1'
+[2025-11-24 15:11:46] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:11:46] [INTEGRITY] [Server] Message signed with HMAC by ana
+[2025-11-24 15:11:46] [INTEGRITY] [Database] Encrypted message from ana saved to DB (ID: 25)
+[2025-11-24 15:11:46] [INTEGRITY] [Client] Verifying message signature from ana in 'ana-carlos1'
+[2025-11-24 15:11:46] [INTEGRITY] [Client] Signature VALID for message from ana
+[2025-11-24 15:11:46] [CONFIDENTIALITY] [Client] Decrypting message from ana with Serpent key
+[2025-11-24 15:11:46] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'olaa'
+[2025-11-24 15:11:46] [INTEGRITY] [Client] Verifying message signature from ana in 'ana-carlos1'
+[2025-11-24 15:11:46] [INTEGRITY] [Client] Signature VALID for message from ana
+[2025-11-24 15:11:46] [CONFIDENTIALITY] [Client] Decrypting message from ana with Serpent key
+[2025-11-24 15:11:46] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'olaa'
+[2025-11-24 15:12:09] [CONFIDENTIALITY] [Server] Stored encrypted keys for private chat carlos1-luiz
+[2025-11-24 15:12:09] [CONFIDENTIALITY] [Server] Sending encrypted room key to carlos1
+[2025-11-24 15:12:14] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'carlos1-luiz'
+[2025-11-24 15:12:14] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:12:14] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:12:14] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 26)
+[2025-11-24 15:12:14] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'carlos1-luiz'
+[2025-11-24 15:12:14] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:12:14] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:12:14] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'oi'
+[2025-11-24 15:12:41] [CONFIDENTIALITY] [Server] Stored encrypted keys for group chat abacate
+[2025-11-24 15:12:41] [CONFIDENTIALITY] [Server] Sending encrypted room key to carlos1
+[2025-11-24 15:12:41] [CONFIDENTIALITY] [Server] Sending encrypted room key to ana
+[2025-11-24 15:12:51] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'abacate'
+[2025-11-24 15:12:51] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:12:51] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:12:51] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 27)
+[2025-11-24 15:12:51] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'abacate'
+[2025-11-24 15:12:51] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:12:51] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:12:51] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'oi'
+[2025-11-24 15:12:56] [CONFIDENTIALITY] [Server] Stored encrypted keys for private chat carlos1-ana
+[2025-11-24 15:12:56] [CONFIDENTIALITY] [Server] Sending encrypted room key to carlos1
+[2025-11-24 15:12:56] [CONFIDENTIALITY] [Server] Sending encrypted room key to ana
+[2025-11-24 15:13:01] [CONFIDENTIALITY] [Server] User carlos1 sending encrypted message to 'carlos1-ana'
+[2025-11-24 15:13:01] [CONFIDENTIALITY] [Server] Message encrypted with Serpent (CBC mode)
+[2025-11-24 15:13:01] [INTEGRITY] [Server] Message signed with HMAC by carlos1
+[2025-11-24 15:13:01] [INTEGRITY] [Database] Encrypted message from carlos1 saved to DB (ID: 28)
+[2025-11-24 15:13:01] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'carlos1-ana'
+[2025-11-24 15:13:01] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:13:01] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:13:01] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'ei'
+[2025-11-24 15:13:05] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'abacate'
+[2025-11-24 15:13:05] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:13:05] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:13:05] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'oi'
+[2025-11-24 15:13:06] [INTEGRITY] [Client] Verifying message signature from carlos1 in 'carlos1-ana'
+[2025-11-24 15:13:06] [INTEGRITY] [Client] Signature VALID for message from carlos1
+[2025-11-24 15:13:06] [CONFIDENTIALITY] [Client] Decrypting message from carlos1 with Serpent key
+[2025-11-24 15:13:06] [CONFIDENTIALITY] [Client] Message decrypted successfully: 'ei'
+[2025-11-24 15:13:26] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 61949) (User: ana)
+[2025-11-24 15:13:27] [AVAILABILITY] [Server] Connection closed with ('127.0.0.1', 61936) (User: carlos1)

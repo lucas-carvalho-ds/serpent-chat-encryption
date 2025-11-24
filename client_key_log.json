@@ -1,0 +1,964 @@
+[
+  {
+    "timestamp": "2025-11-24T14:01:01.329963",
+    "event_type": "RSA_GENERATION",
+    "description": "RSA keypair generated for carlos1",
+    "key_data": {
+      "key_size": 2048,
+      "public_key_hash": "-714176970049987"
+    },
+    "context": {
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:02:46.863848",
+    "event_type": "RSA_GENERATION",
+    "description": "RSA keypair generated for ana",
+    "key_data": {
+      "key_size": 2048,
+      "public_key_hash": "-617006521441412"
+    },
+    "context": {
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:03:16.978604",
+    "event_type": "KEY_GENERATION",
+    "description": "Generated key for private chat with carlos1",
+    "key_data": {
+      "key_hash": "8876446256853736"
+    },
+    "context": {
+      "target": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:03:17.107160",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "8876446256853736"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:03:17.123527",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "1827731851508771"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:03:24.443952",
+    "event_type": "KEY_GENERATION",
+    "description": "Generated key for group chat aaaa",
+    "key_data": {
+      "key_hash": "8179597668006102"
+    },
+    "context": {
+      "group_name": "aaaa",
+      "members": [
+        "carlos1"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:03:24.612712",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: aaaa",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "8179597668006102"
+    },
+    "context": {
+      "room_id": 2,
+      "room_name": "aaaa",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:03:44.210170",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: aaaa",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3485746622099544"
+    },
+    "context": {
+      "room_id": 2,
+      "room_name": "aaaa",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:04:07.493105",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "8876446256853736"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:04:07.498736",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: aaaa",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "8179597668006102"
+    },
+    "context": {
+      "room_id": 2,
+      "room_name": "aaaa",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:05:58.750567",
+    "event_type": "RSA_GENERATION",
+    "description": "RSA keypair generated for carlos",
+    "key_data": {
+      "key_size": 2048,
+      "public_key_hash": "3223298904764873"
+    },
+    "context": {
+      "username": "carlos"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:06:16.868285",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "8876446256853736"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:06:16.875119",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: aaaa",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "8179597668006102"
+    },
+    "context": {
+      "room_id": 2,
+      "room_name": "aaaa",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:08:29.593979",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-679632081532119"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:16:41.704344",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "4423700336088764"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:16:41.710016",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: aaaa",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-819715006568900"
+    },
+    "context": {
+      "room_id": 2,
+      "room_name": "aaaa",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:17:42.962795",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-864951819015960"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:18:30.088120",
+    "event_type": "KEY_GENERATION",
+    "description": "Generated key for group chat asas",
+    "key_data": {
+      "key_hash": "3676308978832954"
+    },
+    "context": {
+      "group_name": "asas",
+      "members": [
+        "ana"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:18:30.280637",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3676308978832954"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:18:30.312854",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-816825385536658"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:18:49.386455",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-816825385536658"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:19:18.795023",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3676308978832954"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:19:28.742995",
+    "event_type": "KEY_GENERATION",
+    "description": "Generated key for group chat asdasd",
+    "key_data": {
+      "key_hash": "3799049433729061"
+    },
+    "context": {
+      "group_name": "asdasd",
+      "members": [
+        "ana"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:19:28.941611",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "2961241062212599"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:19:28.992793",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3799049433729061"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:21:10.587776",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-864951819015960"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:21:10.593506",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-816825385536658"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:21:39.332407",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "4423700336088764"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:21:39.338182",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3676308978832954"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:21:39.353351",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3799049433729061"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:21:52.688108",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "2961241062212599"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:36:28.789028",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "4423700336088764"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:36:28.795058",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3676308978832954"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:36:28.809968",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3799049433729061"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:37:28.892689",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-464140567046852"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:37:28.899350",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "6957874325676499"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:37:41.479680",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-457774851595259"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:42:18.892276",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-611012847599287"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:42:18.899010",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-128660661249373"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:42:41.079160",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "6172278630626065"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:42:41.086138",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "2752776680125365"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:42:41.101856",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-873975615490895"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:42:52.341894",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "2416835185835968"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:42:58.628719",
+    "event_type": "ROOM_KEY_ROTATED",
+    "description": "Auto-rotated key for room: asdasd",
+    "key_data": {
+      "key_hash": "3609451709855757"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "reason": "carlos1 saiu do grupo",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:42:58.846161",
+    "event_type": "ROOM_KEY_ROTATED",
+    "description": "Chave rotacionada para: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3609451709855757"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "reason": "Rotacionada por ana",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:57:57.756480",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-631544943438372"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:57:57.764320",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "5873804360288973"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:58:27.519977",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "4474364015966938"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:58:27.527386",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-622309849855711"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:58:27.544814",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "8644677487328584"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:58:48.030177",
+    "event_type": "RSA_GENERATION",
+    "description": "RSA keypair generated for luiz",
+    "key_data": {
+      "key_size": 2048,
+      "public_key_hash": "-163093771299221"
+    },
+    "context": {
+      "username": "luiz"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T14:59:32.358077",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "4403730314794882"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "luiz"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:05:40.445586",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "2470140086196760"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:05:40.452677",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-409113305426195"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:10:47.321212",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "8372515182041110"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:10:47.328760",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asas",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-651529418590239"
+    },
+    "context": {
+      "room_id": 3,
+      "room_name": "asas",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:11:41.472972",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: ana-carlos1",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "1729961373454887"
+    },
+    "context": {
+      "room_id": 1,
+      "room_name": "ana-carlos1",
+      "room_type": "private",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:11:41.480683",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: asdasd",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "3338361809073668"
+    },
+    "context": {
+      "room_id": 4,
+      "room_name": "asdasd",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:12:09.344504",
+    "event_type": "KEY_GENERATION",
+    "description": "Generated key for private chat with luiz",
+    "key_data": {
+      "key_hash": "6816004755083177"
+    },
+    "context": {
+      "target": "luiz"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:12:09.536150",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: carlos1-luiz",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "6816004755083177"
+    },
+    "context": {
+      "room_id": 5,
+      "room_name": "carlos1-luiz",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:12:41.704645",
+    "event_type": "KEY_GENERATION",
+    "description": "Generated key for group chat abacate",
+    "key_data": {
+      "key_hash": "-639668742394416"
+    },
+    "context": {
+      "group_name": "abacate",
+      "members": [
+        "ana",
+        "luiz"
+      ]
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:12:41.792678",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: abacate",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-613736285883130"
+    },
+    "context": {
+      "room_id": 6,
+      "room_name": "abacate",
+      "room_type": "group",
+      "username": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:12:41.947855",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: abacate",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "-639668742394416"
+    },
+    "context": {
+      "room_id": 6,
+      "room_name": "abacate",
+      "room_type": "group",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:12:56.238979",
+    "event_type": "KEY_GENERATION",
+    "description": "Generated key for private chat with ana",
+    "key_data": {
+      "key_hash": "7843829562457548"
+    },
+    "context": {
+      "target": "ana"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:12:56.430674",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: carlos1-ana",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "7843829562457548"
+    },
+    "context": {
+      "room_id": 7,
+      "room_name": "carlos1-ana",
+      "room_type": "private",
+      "username": "carlos1"
+    }
+  },
+  {
+    "timestamp": "2025-11-24T15:13:05.277986",
+    "event_type": "ROOM_KEY_RECEIVED",
+    "description": "Received and decrypted room key for chat: carlos1-ana",
+    "key_data": {
+      "key_length": 32,
+      "key_hash": "5472758849556622"
+    },
+    "context": {
+      "room_id": 7,
+      "room_name": "carlos1-ana",
+      "room_type": "private",
+      "username": "ana"
+    }
+  }
+]
